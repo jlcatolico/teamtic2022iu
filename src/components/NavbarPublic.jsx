@@ -60,14 +60,14 @@ const Navbar = () => {
 								<Link to={'/ServicioAlCliente'}>
 									<button
 										type='button'
-										className='text-white px-3 py-2 rounded-lg text-lg font-extrabold hover:bg-white hover:text-yellow-600 hover:font-extrabold hover:border-white hover:border-4'>
+										className='text-gray-500 px-3 py-2 rounded-lg text-lg font-extrabold hover:bg-white hover:text-yellow-600 hover:font-extrabold hover:border-white hover:border-4'>
 										Servicio Al Cliente
 									</button>
 								</Link>
 								<Link to={'/AcercaDeNosotros'}>
 									<button
 										type='button'
-										className='text-white px-3 py-2 rounded-lg text-lg font-extrabold hover:bg-white hover:text-yellow-600 hover:font-extrabold hover:border-white hover:border-4'>
+										className='text-gray-500 px-3 py-2 rounded-lg text-lg font-extrabold hover:bg-white hover:text-yellow-600 hover:font-extrabold hover:border-white hover:border-4'>
 										Acerca De Nosotros
 									</button>
 								</Link>
@@ -79,7 +79,7 @@ const Navbar = () => {
 						<button
 							onClick={() => loginWithRedirect()}
 							type='button'
-							className='bg-gray-800 p-1 rounded-full text-gray-400 hover:text-white focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-offset-gray-800 focus:ring-white'>
+							className='bg-green-700 hover:bg-green-600 p-2 rounded-lg text-gray-200 hover:text-white focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-white'>
 							Login
 						</button>
 					</div>

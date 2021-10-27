@@ -1,9 +1,15 @@
-import {Link} from 'react-router-dom';
-import React, {useEffect, useRef, useState} from 'react';
+import { Link } from 'react-router-dom';
+import React, { useEffect, useRef, useState } from 'react';
 import axios from 'axios';
-import {ToastContainer, toast} from 'react-toastify';
+import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
-import {nanoid} from 'nanoid';
+import { nanoid } from 'nanoid';
+
+const getToken = () => {
+	return `Bearer ${localStorage.getItem('token')}`;
+};
+
+
 
 const Usuarios = () => {
 	const [mostrarTabla, setMostrarTabla] = useState(true);
@@ -13,7 +19,13 @@ const Usuarios = () => {
 
 	useEffect(() => {
 		const obtenerUsuarios = async () => {
-			const options = {method: 'GET', url: 'https://frozen-river-09078.herokuapp.com/usuarios/'};
+			const options = {
+				method: 'GET',
+				url: 'https://frozen-river-09078.herokuapp.com/usuarios/',
+				headers: {
+					Autorization: getToken(),
+				}
+			};
 
 			await axios
 				.request(options)
@@ -71,10 +83,10 @@ const Usuarios = () => {
 	);
 };
 
-const TablaUsuarios = ({listaUsuarios, setEjecutarConsulta}) => {
+const TablaUsuarios = ({ listaUsuarios, setEjecutarConsulta }) => {
 	const form = useRef(null);
 
-	const sumitEdit = (e) => {};
+	const sumitEdit = (e) => { };
 
 	return (
 		<div className='w-full h-full flex flex-col overflow-hidden'>
@@ -194,7 +206,7 @@ const TablaUsuarios = ({listaUsuarios, setEjecutarConsulta}) => {
 	);
 };
 
-const FilaUsuarios = ({usuario, setEjecutarConsulta}) => {
+const FilaUsuarios = ({ usuario, setEjecutarConsulta }) => {
 	const [edit, setEdit] = useState(false);
 
 	const [nuevoUsuario, setnuevoUsuario] = useState({
@@ -212,8 +224,8 @@ const FilaUsuarios = ({usuario, setEjecutarConsulta}) => {
 		const options = {
 			method: 'PATCH',
 			url: `https://frozen-river-09078.herokuapp.com/usuarios/${usuario._id}`,
-			headers: {'Content-Type': 'application/json'},
-			data: {...nuevoUsuario},
+			headers: { 'Content-Type': 'application/json', Autorization: getToken(), },
+			data: { ...nuevoUsuario },
 		};
 
 		await axios
@@ -233,7 +245,10 @@ const FilaUsuarios = ({usuario, setEjecutarConsulta}) => {
 	const eliminarUsuario = async () => {
 		const options = {
 			method: 'DELETE',
-			url: `http://localhost:5000/usuarios/${usuario._id}`,
+			url: `https://frozen-river-09078.herokuapp.com/${usuario._id}`,
+			headers: {
+				Autorization: getToken(),
+			}
 		};
 
 		axios
@@ -258,16 +273,16 @@ const FilaUsuarios = ({usuario, setEjecutarConsulta}) => {
 							type='number'
 							value={nuevoUsuario.identificacion}
 							className='inputSearch'
-							onChange={(e) => setnuevoUsuario({...nuevoUsuario, identificacion: e.target.value})}></input>
+							onChange={(e) => setnuevoUsuario({ ...nuevoUsuario, identificacion: e.target.value })}></input>
 					</td>
 					<td className='p-4'>
-						<input type='text' value={nuevoUsuario.nombre} className='listado' onChange={(e) => setnuevoUsuario({...nuevoUsuario, nombre: e.target.value})}></input>
+						<input type='text' value={nuevoUsuario.nombre} className='listado' onChange={(e) => setnuevoUsuario({ ...nuevoUsuario, nombre: e.target.value })}></input>
 					</td>
 					<td className='p-4'>
-						<input type='text' value={nuevoUsuario.apellido} className='listado' onChange={(e) => setnuevoUsuario({...nuevoUsuario, apellido: e.target.value})}></input>
+						<input type='text' value={nuevoUsuario.apellido} className='listado' onChange={(e) => setnuevoUsuario({ ...nuevoUsuario, apellido: e.target.value })}></input>
 					</td>
 					<td className='p-4'>
-						<input type='email' value={nuevoUsuario.correo} className='listado' onChange={(e) => setnuevoUsuario({...nuevoUsuario, correo: e.target.value})}></input>
+						<input type='email' value={nuevoUsuario.correo} className='listado' onChange={(e) => setnuevoUsuario({ ...nuevoUsuario, correo: e.target.value })}></input>
 					</td>
 					<td className='p-4'>
 						<select
@@ -275,7 +290,7 @@ const FilaUsuarios = ({usuario, setEjecutarConsulta}) => {
 							value={nuevoUsuario.estado}
 							name='estado'
 							className='listado'
-							onChange={(e) => setnuevoUsuario({...nuevoUsuario, estado: e.target.value})}
+							onChange={(e) => setnuevoUsuario({ ...nuevoUsuario, estado: e.target.value })}
 							required //revisar, creo que no es necesario
 							defaultValue={0}>
 							<option disabled value={0}>
@@ -292,7 +307,7 @@ const FilaUsuarios = ({usuario, setEjecutarConsulta}) => {
 							value={nuevoUsuario.rol}
 							name='rol'
 							className='listado'
-							onChange={(e) => setnuevoUsuario({...nuevoUsuario, rol: e.target.value})}
+							onChange={(e) => setnuevoUsuario({ ...nuevoUsuario, rol: e.target.value })}
 							required
 							defaultValue={0}>
 							<option disabled value={0}>
@@ -329,7 +344,7 @@ const FilaUsuarios = ({usuario, setEjecutarConsulta}) => {
 	);
 };
 
-const FormularioCreacionUsuarios = ({setMostrarTabla}) => {
+const FormularioCreacionUsuarios = ({ setMostrarTabla }) => {
 	const form = useRef(null);
 
 	const sumitForm = async (e) => {
@@ -345,7 +360,7 @@ const FormularioCreacionUsuarios = ({setMostrarTabla}) => {
 		const options = {
 			method: 'POST',
 			url: 'https://frozen-river-09078.herokuapp.com/usuarios/',
-			headers: {'Content-Type': 'application/json'},
+			headers: { 'Content-Type': 'application/json', Autorization: getToken()},
 			data: {
 				identificacion: nuevoUsuario.identificacion,
 				nombre: nuevoUsuario.nombre,

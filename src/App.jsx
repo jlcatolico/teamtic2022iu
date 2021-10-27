@@ -23,6 +23,7 @@ import Marcas from 'pages/Marcas';
 import Edades from 'pages/Edades';
 import Categorias from 'pages/Categorias';
 import ServicioAlCliente from 'pages/ServicioAlCliente';
+import VentasListado from 'pages/VentasListado';
 import { Auth0Provider } from "@auth0/auth0-react";
 
 
@@ -33,7 +34,6 @@ function App() {
 			clientId='MIcna23UC1pxqrntWCDKM22RQAz4MsyY'
 			audience='api-autenticacion-gestorventas-teamtic'
 			redirectUri='http://localhost:3000/inside'
-			
 			>
 			<div>
 				<Router>
@@ -63,7 +63,7 @@ function App() {
 								'/VentasActualizar',
 								'/VentasCrear',
 								'/Ventas',
-								'/VentasListar',
+								'/VentasListado',
 							]}>
 							<PrivateLayout>
 								<Switch>
@@ -94,8 +94,8 @@ function App() {
 									<Route path='/VentasActualizar'>
 										<VentasActualizar />
 									</Route>
-									<Route path='/VentasListar'>
-										<VentasListar />
+									<Route path='/VentasListado'>
+										<VentasListado />
 									</Route>
 									<Route path='/VentasCrear'>
 										<VentasCrear />

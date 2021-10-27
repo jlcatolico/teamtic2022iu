@@ -13,6 +13,7 @@ const Sidebar = () => {
 				<BotonSideBar nombre='Home' ruta='/Inside' icono='fas fa-home' />
 				<BotonSideBar nombre='Productos' ruta='/Productos' icono='fas fa-gifts' />
 				<BotonSideBar nombre='Ventas' ruta='/Ventas' icono='far fa-list-alt' />
+				<BotonSideBar nombre='VentasListado' ruta='/VentasListado' icono='far fa-list-alt' />
 				<BotonSideBar nombre='Usuarios' ruta='/Usuarios' icono='fas fa-users' />
 			</ul>
 		</nav>

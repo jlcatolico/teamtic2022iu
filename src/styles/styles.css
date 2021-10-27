@@ -15,7 +15,7 @@
 }
 
 .labelTable {
-	@apply px-6 py-3 text-left font-medium text-gray-500 tracking-wider;
+	@apply px-3 py-2 text-left font-medium text-gray-500 tracking-wider;
 }
 
 .resultTable {
@@ -23,7 +23,7 @@
 }
 
 .spaceTable {
-	@apply px-6 py-4 whitespace-nowrap;
+	@apply px-3 py-2 whitespace-nowrap;
 }
 
 .actualizarText {
@@ -31,7 +31,7 @@
 }
 
 .searchButton {
-	@apply inline-flex justify-center py-2 px-4 border border-transparent shadow-sm text-sm font-medium rounded-md text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500;
+	@apply inline-flex justify-center py-2 px-4 border border-transparent shadow-sm rounded-md text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500;
 }
 
 .spanSeccion {

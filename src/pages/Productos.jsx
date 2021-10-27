@@ -1,9 +1,14 @@
-import {Link} from 'react-router-dom';
-import React, {useEffect, useRef, useState} from 'react';
+import { Link } from 'react-router-dom';
+import React, { useEffect, useRef, useState } from 'react';
 import axios from 'axios';
-import {ToastContainer, toast} from 'react-toastify';
+import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
-import {nanoid} from 'nanoid';
+import { nanoid } from 'nanoid';
+
+const getToken = () => {
+	return `Bearer ${localStorage.getItem('token')}`;
+};
+
 
 const Productos = () => {
 	const [mostrarTabla, setMostrarTabla] = useState(true);
@@ -13,7 +18,13 @@ const Productos = () => {
 
 	useEffect(() => {
 		const obtenerProductos = async () => {
-			const options = {method: 'GET', url: 'https://frozen-river-09078.herokuapp.com/productos/'};
+			const options = {
+				method: 'GET',
+				url: 'https://frozen-river-09078.herokuapp.com/productos/',
+				headers: {
+					Autorization: getToken(),
+				}
+			};
 
 			await axios
 				.request(options)
@@ -67,10 +78,10 @@ const Productos = () => {
 	);
 };
 
-const TablaProductos = ({listaProductos, setEjecutarConsulta}) => {
+const TablaProductos = ({ listaProductos, setEjecutarConsulta }) => {
 	const form = useRef(null);
 
-	const sumitEdit = (e) => {};
+	const sumitEdit = (e) => { };
 
 	return (
 		<div className='w-full h-full flex flex-col overflow-hidden'>
@@ -176,7 +187,7 @@ const TablaProductos = ({listaProductos, setEjecutarConsulta}) => {
 	);
 };
 
-const FilaPoducto = ({producto, setEjecutarConsulta}) => {
+const FilaPoducto = ({ producto, setEjecutarConsulta }) => {
 
 	const [edit, setEdit] = useState(false);
 
@@ -192,9 +203,9 @@ const FilaPoducto = ({producto, setEjecutarConsulta}) => {
 
 		const options = {
 			method: 'PATCH',
-			url: `https://frozen-river-09078.herokuapp.com/${producto._id}`,
-			headers: {'Content-Type': 'application/json'},
-			data: {...nuevoProducto},
+			url: `https://frozen-river-09078.herokuapp.com/productos/${producto._id}`,
+			headers: { 'Content-Type': 'application/json', Autorization: getToken(), },
+			data: { ...nuevoProducto },
 		};
 
 		await axios
@@ -214,7 +225,10 @@ const FilaPoducto = ({producto, setEjecutarConsulta}) => {
 	const eliminarVehiculo = async () => {
 		const options = {
 			method: 'DELETE',
-			url: `https://frozen-river-09078.herokuapp.com/${producto._id}`,
+			url: `https://frozen-river-09078.herokuapp.com/productos/${producto._id}`,
+			headers: {
+				Autorization: getToken(),
+			}
 		};
 
 		axios
@@ -236,11 +250,11 @@ const FilaPoducto = ({producto, setEjecutarConsulta}) => {
 				<>
 					<td className='p-4'>
 						{' '}
-						<input type='number' value={nuevoProducto.id_producto} className='listado' onChange={(e) => setnuevoProducto({...nuevoProducto, id_producto: e.target.value})}></input>
+						<input type='number' value={nuevoProducto.id_producto} className='listado' onChange={(e) => setnuevoProducto({ ...nuevoProducto, id_producto: e.target.value })}></input>
 					</td>
 					<td className='p-4'>
 						{' '}
-						<input type='text' value={nuevoProducto.descripcion} className='listado' onChange={(e) => setnuevoProducto({...nuevoProducto, descripcion: e.target.value})}></input>
+						<input type='text' value={nuevoProducto.descripcion} className='listado' onChange={(e) => setnuevoProducto({ ...nuevoProducto, descripcion: e.target.value })}></input>
 					</td>
 					<td className='p-4'>
 						{' '}
@@ -248,7 +262,7 @@ const FilaPoducto = ({producto, setEjecutarConsulta}) => {
 							type='number'
 							value={nuevoProducto.precio_unitario}
 							className='listado'
-							onChange={(e) => setnuevoProducto({...nuevoProducto, precio_unitario: e.target.value})}></input>
+							onChange={(e) => setnuevoProducto({ ...nuevoProducto, precio_unitario: e.target.value })}></input>
 					</td>
 					<td className='p-4'>
 						{' '}
@@ -259,7 +273,7 @@ const FilaPoducto = ({producto, setEjecutarConsulta}) => {
 							className='listado'
 							required
 							defaultValue={0}
-							onChange={(e) => setnuevoProducto({...nuevoProducto, estado: e.target.value})}>
+							onChange={(e) => setnuevoProducto({ ...nuevoProducto, estado: e.target.value })}>
 							<option disabled value={0}>
 								Seleccione una Opcion
 							</option>
@@ -292,7 +306,7 @@ const FilaPoducto = ({producto, setEjecutarConsulta}) => {
 	);
 };
 
-const FormularioCreacionProductos = ({setMostrarTabla}) => {
+const FormularioCreacionProductos = ({ setMostrarTabla }) => {
 	const form = useRef(null);
 
 	const sumitForm = async (e) => {
@@ -307,9 +321,10 @@ const FormularioCreacionProductos = ({setMostrarTabla}) => {
 		console.log(nuevoProducto);
 		const options = {
 			method: 'POST',
-			url: 'https://frozen-river-09078.herokuapp.com/productos/',
-			headers: {'Content-Type': 'application/json'},
-			data: {id_producto: nuevoProducto.id_producto, descripcion: nuevoProducto.descripcion, precio_unitario: nuevoProducto.precio_unitario, estado: nuevoProducto.estado},
+			//url: 'https://frozen-river-09078.herokuapp.com/productos/',
+			url: 'http://localhost:5000/productos/',
+			headers: { 'Content-Type': 'application/json', Autorization: getToken(), },
+			data: { id_producto: nuevoProducto.id_producto, descripcion: nuevoProducto.descripcion, precio_unitario: nuevoProducto.precio_unitario, estado: nuevoProducto.estado },
 		};
 
 		console.log('option ejecutados');
@@ -350,9 +365,7 @@ const FormularioCreacionProductos = ({setMostrarTabla}) => {
 								<input type='text' name='descripcion' id='descripcion' className='inputTextE' required />
 							</div>
 							<div>
-								<label className=' tracking-wide mb-2 text-gray-600' htmlFor='ValorUnitario'>
-									Valor Unitario
-								</label>
+								<label className=' tracking-wide mb-2 text-gray-600' htmlFor='ValorUnitario'>Valor Unitario</label>
 								<input type='number' name='precio_unitario' id='precio_unitario' className='inputTextE' required />
 							</div>
 

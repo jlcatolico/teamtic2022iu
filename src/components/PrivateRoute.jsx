@@ -8,13 +8,17 @@ const PrivateRoute = ({ children }) => {
     useEffect(() => {
         const fetchAuth0Token = async () => {
             const accessToken = await getAccessTokenSilently({
-                audience:`api-autenticacion-gestorventas-teamtic`,
+                audience: `api-autenticacion-gestorventas-teamtic`,
             });
-            console.log(accessToken);
+            localStorage.setItem('token', accessToken);
         };
 
-       // fetchAuth0Token();
-    }, [])
+        if (isAuthenticated) {
+            fetchAuth0Token();
+        }
+
+
+    }, [isAuthenticated, getAccessTokenSilently])
 
     if (isLoading) return <div>Loading...</div>;
     return isAuthenticated ? <> {children}</> : <div>No estas Autenticado para ver el sitio</div>
