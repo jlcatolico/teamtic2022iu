@@ -17,7 +17,7 @@ const Navbar = () => {
 	return (
 		<nav className='bg-gray-200'>
 			<div className='mx-auto my-auto px-2 sm:px-6 lg:px-8'>
-				<div className='relative flex items-center justify-between h-16'>
+				<div className='relative flex items-center justify-between h-12'>
 					<div className='absolute inset-y-0 left-0 flex items-center sm:hidden'>
 						<button
 							type='button'
@@ -45,7 +45,7 @@ const Navbar = () => {
 							<div >
 								<span className=' p-3 text-gray-800'>{user.name}</span>
 							</div>
-							<img src={user.picture} className='rounded-full w-12' />
+							<img src={user.picture} className='rounded-full w-10' />
 						</div>
 						<div className='ml-3 relative'>
 							<div>

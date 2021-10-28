@@ -156,3 +156,6 @@
   	background-position: center center;
 	background-attachment:scroll;
 }
+.buttonIcons{
+	@apply ml-3 text-gray-600;
+}
