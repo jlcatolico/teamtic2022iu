@@ -1,6 +1,6 @@
 
 import React, { useEffect, useState, useRef } from 'react';
-import { Link } from 'react-router-dom';
+import { Link, useHistory } from 'react-router-dom';
 import axios from 'axios';
 import { nanoid } from 'nanoid';
 import { crearVenta } from 'utils/api';
@@ -9,8 +9,8 @@ import { obtenerUsuarios } from 'utils/api';
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import values from 'postcss-modules-values';
-
-
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faArrowLeft, faCheck, faPlus } from '@fortawesome/free-solid-svg-icons';
 
 const Ventas = () => {
 
@@ -22,7 +22,7 @@ const Ventas = () => {
 	const [vendedores, setVendedores] = useState([]);
 	const [productos, setProductos] = useState([]);
 	const [productosTabla, setProductosTabla] = useState([]);
-
+	const history = useHistory();
 	const [mostrarTabla, setMostrarTabla] = useState(true);
 	const [textoBoton, setTextoBoton] = useState('Crear Venta');
 	const [ventas, setVentas] = useState([]);
@@ -57,17 +57,6 @@ const Ventas = () => {
 		fetchVendores();
 		fetchProductos();
 	}, []);
-
-
-	useEffect(() => {
-		if (mostrarTabla) {
-			setTextoBoton('+ Crear Venta');
-		} else {
-			setTextoBoton('Mostrar Ventas');
-		}
-	}, [mostrarTabla]);
-
-
 
 	const submitForm = async (e) => {
 		e.preventDefault();
@@ -122,10 +111,8 @@ const Ventas = () => {
 			});
 		console.log('enviado');
 		toast.success('venta agregada con exito');
+		history.push('/VentasListado');
 	};
-
-
-
 
 	return (
 		<div className='w-11/12'>
@@ -135,16 +122,15 @@ const Ventas = () => {
 				</div>
 				<div className=' w-2/6 flex items-center'>
 					<div className='w-full flex justify-end items-center'>
-						<button onClick={() => {
-							setMostrarTabla(!mostrarTabla);
-						}}
-							className='text-white bg-green-500 p-2 rounded-lg hover:bg-green-600 mx-4 '>
-							{textoBoton}
+						<button className='normalButton'>
+							<Link to='/VentasListado'>
+								<FontAwesomeIcon icon={faArrowLeft} className='m-1 align-middle mx-2' />
+								Regresar
+							</Link>
 						</button>
 					</div>
 				</div>
 			</div>
-
 
 			<div className='grid justify-items-center'>
 				<div className='my-3'>
@@ -157,18 +143,17 @@ const Ventas = () => {
 								<div>
 									<div className='grid grid-cols-2 items-center'>
 										<label className='tracking-wide mb-2'>Fecha
-											{/* puede ser necesario un usefect */}
 										</label>
-										<input type='date' name='fecha' className='inputTextE text-gray-600' />
+										<input type='date' name='fecha' className='inputTextE text-gray-600 w-64' />
 									</div>
 									<div className='grid grid-cols-2 items-center'>
 										<label className='tracking-wide mb-2' htmlFor='vendedor'>Vendedor</label>
-										<select name='vendedor' className='inputTextE text-gray-600' defaultValue=''  required>
+										<select name='vendedor' className='inputTextE text-gray-600 w-64' defaultValue='' required>
 											<option disabled value=''>
 												Seleccione un Vendedor
 											</option>
 											{vendedores.map((el) => {
-												return <option key={nanoid()} value={el._id}>{`${el.nombre} ${el.apellido}`}</option>;
+												return (<option key={nanoid()} onChange={(a) => setVendedores(vendedores.filter((v) => v._id === a.target.value)[0])} value={el._id}>{`${el.nombre} ${el.apellido}`}</option>);
 											})}
 										</select>
 									</div>
@@ -185,9 +170,12 @@ const Ventas = () => {
 											<option>Cancelada</option>
 										</select>
 									</div>
-									<button type='submit' className='searchButton bg-green-400 p-2 hover:bg-green-600 justify-items-center my-10'>
+									<div className='grid justify-items-center'>
+									<button type='submit' className='normalButton justify-items-center my-10'>
+										<FontAwesomeIcon icon={faCheck}className='m-1 align-middle mx-2' />
 										Crear Venta
 									</button>
+									</div>
 								</div>
 							</div>
 						</div>
@@ -206,10 +194,6 @@ const TablaProductos = ({ productos, setProductos, setProductosTabla, total, set
 
 	const [cantidadProducto, setCantidadProducto] = useState([0]);
 
-
-
-
-
 	useEffect(() => {
 		console.log(productoAgregar);
 	}, [productoAgregar]);
@@ -218,8 +202,6 @@ const TablaProductos = ({ productos, setProductos, setProductosTabla, total, set
 		console.log('filasTabla', filasTabla);
 		setProductosTabla(filasTabla);
 	}, [filasTabla, setProductosTabla]);
-
-
 
 	const agregarNuevoProducto = () => {
 
@@ -231,7 +213,6 @@ const TablaProductos = ({ productos, setProductos, setProductosTabla, total, set
 		console.log('total producto', valorTotal);
 		console.log('total venta acomulada', ventaAcomulada);
 
-
 		productoAgregar['cantidad'] = cantidadProducto;
 		productoAgregar['valor_total'] = valorTotal;
 
@@ -239,22 +220,29 @@ const TablaProductos = ({ productos, setProductos, setProductosTabla, total, set
 
 		console.log('producto con cantidad', productoAgregar);
 
-		if (cantidadProducto > 0) {
+		if (productoAgregar.id_producto) {
 
-			setFilasTabla([...filasTabla, productoAgregar]);
-			setProductos(productos.filter((v) => v._id !== productoAgregar._id));
-			setProductoAgregar({});
+			if (cantidadProducto > 0) {
+
+				setFilasTabla([...filasTabla, productoAgregar]);
+				setProductos(productos.filter((v) => v._id !== productoAgregar._id));
+				console.log(productoAgregar);
+				setProductoAgregar({});
+			} else {
+				console.error('cantidad en cero')
+				toast.error('La cantidad debe ser mayor a cero');
+			}
+			
 		} else {
-			console.error('cantidad en cero')
-			toast.error('La cantidad debe ser ingresada');
+			toast.error('Debe ingresar el producto');
 		}
 
 	};
 
 	const eliminarProducto = (productoEliminar) => {
-		
+
 		const ventaAcomulada = parseInt(total) - parseInt(productoEliminar['valor_total']);
-		setTotal (ventaAcomulada);
+		setTotal(ventaAcomulada);
 		setFilasTabla(filasTabla.filter((v) => v._id !== productoEliminar._id));
 		setProductos([...productos, productoEliminar]);
 
@@ -280,7 +268,7 @@ const TablaProductos = ({ productos, setProductos, setProductosTabla, total, set
 			<div className='flex justify align-middle my-6'>
 				<label className='flex flex-col' htmlFor='producto'>
 					<select className='inputTextE text-gray-600' value={productoAgregar._id ?? ''} onChange={(e) => setProductoAgregar(productos.filter((v) => v._id === e.target.value)[0])}>
-					<option disabled value=''>Seleccione un Producto</option>
+						<option disabled value=''>Seleccione un Producto</option>
 						{productos.map((el) => {
 							return (<option key={nanoid()} value={el._id}>{`${el.descripcion}`}</option>
 							);
@@ -294,7 +282,8 @@ const TablaProductos = ({ productos, setProductos, setProductosTabla, total, set
 
 
 				<div className='flex items-center'>
-					<button type='button' onClick={() => agregarNuevoProducto()} className='searchButton bg-green-400 p-2 hover:bg-green-600 mx-4'>
+					<button type='button' onClick={() => agregarNuevoProducto()} className='normalButton'>
+					<FontAwesomeIcon icon={faPlus}className='m-1 align-middle mx-2' />
 						Agregar Producto
 					</button>
 				</div>
@@ -339,10 +328,10 @@ const TablaProductos = ({ productos, setProductos, setProductosTabla, total, set
 			</table>
 
 			<div className='grid grid-cols-2 items-center'>
-				<label className='tracking-wide mb-2'>Valor Total Venta
-					{/* puede ser necesario un usefect */}
+				<label className='tracking-wide mb-2'>
+					Valor Total Venta
 				</label>
-				<input readOnly='readonly' type='number' value={total} name='totalVenta' id='totalVenta' className='inputTextE text-right w-48 bg-gray-300' required />
+				<input readOnly='readonly' type='number' value={total} name='totalVenta' id='totalVenta' className='inputTextD text-right w-48 text-gray-600' required />
 			</div>
 
 		</div>

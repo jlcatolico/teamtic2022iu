@@ -1,198 +1,399 @@
-import {faArrowLeft} from '@fortawesome/free-solid-svg-icons';
-import {FontAwesomeIcon} from '@fortawesome/react-fontawesome';
-import React from 'react';
-import {Link} from 'react-router-dom';
 
-const producto = [
-	{
-		id_producto: '00034',
-		descripcion: 'Televisor lg 42 Pulgadas',
-		cantidad: '2',
-		precioUnitario: '2.300.000',
-		precioTotal: '4.500.000',
-	},
-	{
-		id_producto: '00012',
-		descripcion: 'mini componente sony 300w',
-		cantidad: '3',
-		precioUnitario: '500.000',
-		precioTotal: '1.800.000',
-	},
-	{
-		id_producto: '00054',
-		descripcion: 'Lavadora lg 30 libras',
-		cantidad: '1',
-		precioUnitario: '3.200.000',
-		precioTotal: '3.200.000',
-	},
-];
+import React, { useEffect, useState, useRef } from 'react';
+import { Link, useHistory } from 'react-router-dom';
+import axios from 'axios';
+import { nanoid } from 'nanoid';
+import { crearVenta } from 'utils/api';
+import { obtenerProductos } from 'utils/api';
+import { obtenerUsuarios } from 'utils/api';
+import { ToastContainer, toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
+import values from 'postcss-modules-values';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faArrowLeft, faCheck, faPlus } from '@fortawesome/free-solid-svg-icons';
 
 const VentasActualizar = () => {
+
+	const getToken = () => {
+		return `Bearer ${localStorage.getItem('token')}`;
+	};
+
+	const form = useRef(null);
+	const [vendedores, setVendedores] = useState([]);
+	const [productos, setProductos] = useState([]);
+	const [productosTabla, setProductosTabla] = useState([]);
+	const history = useHistory();
+	const [mostrarTabla, setMostrarTabla] = useState(true);
+	const [textoBoton, setTextoBoton] = useState('Crear Venta');
+	const [ventas, setVentas] = useState([]);
+	const [ejecutarConsulta, setEjecutarConsulta] = useState([]);
+	let [total, setTotal] = useState(0);
+	
+	const [edit, setEdit] = useState(false);
+	
+
+	useEffect(() => {
+
+		const fetchVendores = async () => {
+			await obtenerUsuarios(
+				(response) => {
+					setVendedores(response.data);
+				},
+				(error) => {
+					console.error(error);
+				}
+			);
+		};
+
+		const fetchProductos = async () => {
+			await obtenerProductos(
+				(response) => {
+					setProductos(response.data);
+				},
+				(error) => {
+					console.error(error);
+				}
+			);
+		};
+
+		const obtenerVentas = async () => {
+			const options = { method: 'GET', url: 'http://localhost:5000/ventas/' };
+
+			await axios
+				.request(options)
+				.then(function (response) {
+					setVentas(response.data);
+					console.log(ventas);
+					console.log(response.data);
+				})
+				.catch(function (error) {
+					console.error(error);
+				});
+		};
+		if (ejecutarConsulta) {
+			obtenerVentas();
+			setEjecutarConsulta(false);
+		}
+
+
+
+		fetchVendores();
+		fetchProductos();
+	}, []);
+
+	const submitForm = async (e) => {
+		e.preventDefault();
+		const fd = new FormData(form.current);
+		
+		const nuevaVenta = {};
+
+		const formData = {};
+		fd.forEach((value, key) => {
+			formData[key] = value;
+		});
+
+		console.log('form data', formData);
+
+		const listaProductos = Object.keys(formData)
+			.map((k) => {
+				if (k.includes('producto')) {
+					return productosTabla.filter((v) => v._id === formData[k])[0];
+				}
+				return null;
+			})
+			.filter((v) => v);
+
+		console.log('lista antes de cantidad', listaProductos);
+
+
+		console.log('lista después de cantidad y valor total', listaProductos);
+
+		// const [nuevaVenta, setNuevaVenta] = useState({
+		// 	vendedor: vendedores.filter((v) => v._id === formData.vendedor)[0],
+		// 	cantidad: formData.valor_venta,
+		// 	productos: listaProductos,
+		// 	totalVenta: formData.totalVenta,
+		// 	fecha: formData.fecha,
+		// 	estado: formData.estado
+		// });
+
+		const datosVenta = {
+			vendedor: vendedores.filter((v) => v._id === formData.vendedor)[0],
+			cantidad: formData.valor_venta,
+			productos: listaProductos,
+			totalVenta: formData.totalVenta,
+			fecha: formData.fecha,
+			estado: formData.estado
+		};
+
+		// const options = {
+		// 	method: 'POST',
+		// 	url: 'http://localhost:5000/ventas/',
+		// 	headers: { 'Content-Type': 'application/json', Autorization: getToken(), },
+		// 	data: datosVenta,
+		// };
+
+		// console.log('option ejecutados');
+
+		// await axios.request(options)
+		// 	.then(function (response) {
+		// 		console.log(response.data);
+		// 	})
+		// 	.catch(function (error) {
+		// 		console.log('error');
+		// 		console.error(error);
+		// 	});
+		// console.log('enviado');
+		// toast.success('venta agregada con exito');
+		// history.push('/VentasListado');
+
+		const actualizarVenta = async () => {
+			console.log(nuevaVenta);
+
+			const options = {
+				method: 'PATCH',
+				url: `http://localhost:5000/ventasactualizar/${ventas._id}`,
+				headers: { 'Content-Type': 'application/json' },
+				data: { ...datosVenta },
+			};
+
+			await axios
+				.request(options)
+				.then(function (response) {
+					console.log(response.data);
+					toast.success('Vetnta modificada con exito');
+					setEjecutarConsulta(true);
+					setEdit(false);
+				})
+				.catch(function (error) {
+					console.error(error);
+					toast.error('La venta no se pudo modificar');
+				});
+		};
+
+	};
+
 	return (
-		<>
-			<div className='h-full flex flex-col p-3'>
-				<div className='grid-rows-2 grid-cols-1 h-screen '>
-					<div className='md:flex mb-2 flex justify-between'>
-						<h2 className='text-lg font-medium leading-6'>Actualizar Información de Ventas</h2>
-						<Link to='/VentasListar'>
-							<div className='px-4 py-3 text-right sm:px-2'>
-								<button type='button' className='searchButton'>
-									<FontAwesomeIcon icon={faArrowLeft} className='m-1 align-middle' />
-									Regresar
-								</button>
-							</div>
-						</Link>
+		<div className='w-11/12'>
+			<div className='flex justify-evenly'>
+				<div className=' my-4 p-2 w-4/6'>
+					<span className='p-2 w-full text-2xl'>Administracion de Ventas</span>
+				</div>
+				<div className=' w-2/6 flex items-center'>
+					<div className='w-full flex justify-end items-center'>
+						<button className='normalButton'>
+							<Link to='/VentasListado'>
+								<FontAwesomeIcon icon={faArrowLeft} className='m-1 align-middle mx-2' />
+								Regresar
+							</Link>
+						</button>
 					</div>
-					<br />
-					<form action='#'>
+				</div>
+			</div>
+
+			<div className='grid justify-items-center'>
+				<div className='my-3'>
+					<h2 className='text-lg font-medium text-gray-600'>Nueva Venta</h2>
+				</div>
+				<div className='my-3'>
+					<form ref={form} onSubmit={submitForm}>
 						<div className='shadow overflow-hidden sm:rounded-md p-3'>
-							<div className='tituloSeccion'>
-								<span className='spanSeccion'>Información Venta</span>
-							</div>
-							<div className='-mx-3 md:flex mb-1'>
-								<div className=' md:w-1/4 px-3'>
-									<label className=' tracking-wide mb-2' htmlFor=''>
-										Id Venta
-									</label>
-									<input className='inputTextD' id='id_venta' type='text' disabled='true' />
-								</div>
-								<div className=' md:w-1/4 px-3'>
-									<label className=' tracking-wide mb-2' htmlFor=''>
-										Fecha Venta
-									</label>
-									<input className='inputTextD text-gray-400' id='fecha_venta' type='date' disabled='true' />
-								</div>
-								<div className=' md:w-2/4 px-3'>
-									<label className=' tracking-wide mb-2' htmlFor=''>
-										Estado Venta
-									</label>
-									<select id='estado' name='estado' className='inputTextE'>
-										<option>En proceso</option>
-										<option>Entregada</option>
-										<option>Cancelada</option>
-									</select>
-								</div>
-							</div>
-							<div className='tituloSeccion'>
-								<span className='spanSeccion'>Información Cliente</span>
-							</div>
-							<div className='-mx-3 md:flex mb-1'>
-								<div className='md:w-1/4 px-3'>
-									<label className='tracking-wide  mb-2' htmlFor=''>
-										Identificación
-									</label>
-									<input className='inputTextD' id='id_cliente' type='text' disabled='true' />
-								</div>
-								<div className='md:w-3/4 px-3 mb-6 md:mb-0'>
-									<label className='tracking-wide mb-2' htmlFor=''>
-										Nombre
-									</label>
-									<input className='inputTextD' id='nombre_cliente' type='text' disabled='true' />
-								</div>
-							</div>
-							<div className='-mx-3 md:flex mb-1'>
-								<div className='md:w-1/2 px-3 mb-3 md:mb-0'>
-									<label className='tracking-wide mb-2' htmlFor=''>
-										Direccion
-									</label>
-									<input className='inputTextD' id='direccion_cliente' type='text' disabled='true' />
-								</div>
+							<div className='grid grid-cols-1'>
+								<div>
+									<div className='grid grid-cols-2 items-center'>
+										<label className='tracking-wide mb-2'>Fecha
+										</label>
+										<input type='date' name='fecha' className='inputTextE text-gray-600 w-64' />
+									</div>
+									<div className='grid grid-cols-2 items-center'>
+										<label className='tracking-wide mb-2' htmlFor='vendedor'>Vendedor</label>
+										<select name='vendedor' className='inputTextE text-gray-600 w-64' defaultValue='' required>
+											<option disabled value=''>
+												Seleccione un Vendedor
+											</option>
+											{vendedores.map((el) => {
+												return (<option key={nanoid()} onChange={(a) => setVendedores(vendedores.filter((v) => v._id === a.target.value)[0])} value={el._id}>{`${el.nombre} ${el.apellido}`}</option>);
+											})}
+										</select>
+									</div>
 
-								<div className='md:w-1/2 px-3'>
-									<label className='tracking-wide mb-2' htmlFor=''>
-										Correo Electronico
-									</label>
-									<input className='inputTextD' id='email_cliente' type='text' disabled='true' />
-								</div>
-							</div>
+									<TablaProductos productos={productos} setProductos={setProductos} setProductosTabla={setProductosTabla} total={total} setTotal={setTotal} />
 
-							<div className='tituloSeccion'>
-								<span className='spanSeccion'>Información Vendedor</span>
-							</div>
-							<div className='-mx-3 md:flex mb-1'>
-								<div className='md:w-1/4 px-3'>
-									<label className='tracking-wide mb-2' htmlFor=''>
-										Codigo
-									</label>
-									<input className='inputTextD' id='id_vendedor' type='text' disabled='true' />
+									<div className='grid grid-cols-2 items-center'>
+										<label className='tracking-wide mb-2'>Estado
+										</label>
+										<select name='estado' className='inputTextE text-gray-600 w-48'>
+											<option disabled value=''>Seleccione un Estado</option>
+											<option>En progreso</option>
+											<option>Completada</option>
+											<option>Cancelada</option>
+										</select>
+									</div>
+									<div className='grid justify-items-center'>
+										<button type='submit' className='normalButton justify-items-center my-10'>
+											<FontAwesomeIcon icon={faCheck} className='m-1 align-middle mx-2' />
+											Crear Venta
+										</button>
+									</div>
 								</div>
-								<div className='md:w-1/2 px-3 mb-6 md:mb-0'>
-									<label className='tracking-wide mb-2' htmlFor=''>
-										Nombre
-									</label>
-									<input className='inputTextD' id='nombre_vendedor' type='text' disabled='true' />
-								</div>
-							</div>
-							<div className='tituloSeccion'>
-								<span className='spanSeccion'>Detalle de Productos</span>
-							</div>
-
-							<div className='-mx-3 md:flex mb-6'>
-								<table className='min-w-full divide-y divide-gray-300'>
-									<thead className='bg-gray-50'>
-										<tr>
-											<th scope='col' className='labelTable'>
-												Codigo
-											</th>
-											<th scope='col' className='labelTable'>
-												Decripción
-											</th>
-											<th scope='col' className='labelTable text-right'>
-												Cantidad
-											</th>
-											<th scope='col' className='labelTable text-right'>
-												Precio Unitario
-											</th>
-											<th scope='col' className='labelTable text-right'>
-												Precio Total
-											</th>
-										</tr>
-									</thead>
-									<tbody className='bg-white divide-y divide-gray-300'>
-										{producto.map((producto) => (
-											<tr key={producto.id_producto}>
-												<td className='spaceTable resultTable'>{producto.id_producto}</td>
-												<td className='spaceTable resultTable'>{producto.descripcion}</td>
-												<td className='spaceTable resultTable'>
-													<div className='flex justify-end'>{producto.cantidad}</div>
-												</td>
-												<td className='spaceTable resultTable'>
-													<div className='flex justify-end'>{producto.precioUnitario}</div>
-												</td>
-												<td className='spaceTable resultTable'>
-													<div className='flex justify-end'>{producto.precioTotal}</div>
-												</td>
-											</tr>
-										))}
-									</tbody>
-								</table>
-							</div>
-
-							<div className='md:flex mb-2'>
-								<span className='totalVentaT'>Sub Total:</span>
-								<span className='totalVentaN'>9.600.000</span>
-							</div>
-							<div className='md:flex mb-2'>
-								<span className='totalVentaT'>Impuestos:</span>
-								<span className='totalVentaN'>1.824.000</span>
-							</div>
-							<div className='md:flex mb-2'>
-								<span className='totalVentaT'>Total:</span>
-								<span className='totalVentaN'>11.424.000</span>
-							</div>
-							<div className='px-4 py-3 bg-gray-50 text-right sm:px-2 mb-5'>
-								<button type='submit' className='searchButton'>
-									Guardar
-								</button>
-							</div>
-							<div className='bg-green-400  w-full rounded-md my-3'>
-								<p className='p-2 text-center text-white'>El registro se actualizó correctamente</p>
 							</div>
 						</div>
 					</form>
+
 				</div>
+				<ToastContainer position='bottom-center' autoClose={2000} />
 			</div>
-		</>
+		</div>
+	);
+};
+
+const TablaProductos = ({ productos, setProductos, setProductosTabla, total, setTotal }) => {
+	const [productoAgregar, setProductoAgregar] = useState({});
+	const [filasTabla, setFilasTabla] = useState([]);
+
+	const [cantidadProducto, setCantidadProducto] = useState([0]);
+
+	useEffect(() => {
+		console.log(productoAgregar);
+	}, [productoAgregar]);
+
+	useEffect(() => {
+		console.log('filasTabla', filasTabla);
+		setProductosTabla(filasTabla);
+	}, [filasTabla, setProductosTabla]);
+
+	const agregarNuevoProducto = () => {
+
+		console.log('valor unitario', productoAgregar["precio_unitario"]);
+
+		const valorTotal = parseInt(productoAgregar["precio_unitario"]) * parseInt(cantidadProducto);
+		const ventaAcomulada = parseInt(total) + parseInt(valorTotal);
+
+		console.log('total producto', valorTotal);
+		console.log('total venta acomulada', ventaAcomulada);
+
+		productoAgregar['cantidad'] = cantidadProducto;
+		productoAgregar['valor_total'] = valorTotal;
+
+		setTotal(ventaAcomulada);
+
+		console.log('producto con cantidad', productoAgregar);
+
+		if (productoAgregar.id_producto) {
+
+			if (cantidadProducto > 0) {
+
+				setFilasTabla([...filasTabla, productoAgregar]);
+				setProductos(productos.filter((v) => v._id !== productoAgregar._id));
+				console.log(productoAgregar);
+				setProductoAgregar({});
+			} else {
+				console.error('cantidad en cero')
+				toast.error('La cantidad debe ser mayor a cero');
+			}
+
+		} else {
+			toast.error('Debe ingresar el producto');
+		}
+
+	};
+
+	const eliminarProducto = (productoEliminar) => {
+
+		const ventaAcomulada = parseInt(total) - parseInt(productoEliminar['valor_total']);
+		setTotal(ventaAcomulada);
+		setFilasTabla(filasTabla.filter((v) => v._id !== productoEliminar._id));
+		setProductos([...productos, productoEliminar]);
+
+	};
+
+	const modificarProducto = (producto, cantidad) => {
+
+		setFilasTabla(
+			filasTabla.map((ft) => {
+				if (ft._id === producto.id) {
+					ft.cantidad = cantidad;
+					ft.total = producto.precio_unitario * cantidad;
+				}
+				return ft;
+			})
+		);
+	};
+
+
+
+	return (
+		<div>
+			<div className='flex justify align-middle my-6'>
+				<label className='flex flex-col' htmlFor='producto'>
+					<select className='inputTextE text-gray-600' value={productoAgregar._id ?? ''} onChange={(e) => setProductoAgregar(productos.filter((v) => v._id === e.target.value)[0])}>
+						<option disabled value=''>Seleccione un Producto</option>
+						{productos.map((el) => {
+							return (<option key={nanoid()} value={el._id}>{`${el.descripcion}`}</option>
+							);
+						})}
+					</select>
+				</label>
+
+				<label htmlFor='cantidad' className='mx-3'>Cantidad
+					<input type='number' name='cantidad' className='spacetable inputTextE w-24 mx-3' onChange={(e) => setCantidadProducto(e.target.value)} required />
+				</label>
+
+
+				<div className='flex items-center'>
+					<button type='button' onClick={() => agregarNuevoProducto()} className='normalButton'>
+						<FontAwesomeIcon icon={faPlus} className='m-1 align-middle mx-2' />
+						Agregar Producto
+					</button>
+				</div>
+
+			</div>
+			<table className='min-w-full divide-y divide-gray-200 my-6'>
+				<thead className='bg-gray-50'>
+					<tr>
+						<th className='labelTable'>Id Producto</th>
+						<th className='labelTable'>Descripcion</th>
+						<th className='labelTable'>Valor unitario</th>
+						<th className='labelTable'>Estado</th>
+						<th className='labelTable'>Unidades</th>
+						<th className='labelTable'>Valor Total</th>
+						<th className='labelTable'>Eliminar</th>
+						<th className='labelTable hidden'>Input</th>
+					</tr>
+				</thead>
+				<tbody>
+					{filasTabla.map((el, index) => {
+						// return <FilaProducto key={el._id} prod={el} index={index} eliminarProducto={eliminarProducto} modificarProducto={modificarProducto} />;
+						return (
+							<tr key={nanoid()}>
+								<td className='spaceTable resultTable'>{el.id_producto}</td>
+								<td className='spaceTable resultTable'>{el.descripcion}</td>
+								<td className='spaceTable resultTable text-right'>{el.precio_unitario}</td>
+								<td className='spaceTable resultTable'>{el.estado}</td>
+								<td className='spaceTable resultTable'>{el.cantidad}</td>
+								<td className='spaceTable resultTable'>{el.valor_total}</td>
+
+								<td className='spaceTable resultTable text-center'>
+									<i
+										onClick={() => eliminarProducto(el)}
+										className='fas fa-minus text-red-500 cursor-pointer'
+									/>
+								</td>
+								<input hidden defaultValue={el._id} name={`producto${index}`} />
+							</tr>
+						);
+					})}
+				</tbody>
+			</table>
+
+			<div className='grid grid-cols-2 items-center'>
+				<label className='tracking-wide mb-2'>
+					Valor Total Venta
+				</label>
+				<input readOnly='readonly' type='number' value={total} name='totalVenta' id='totalVenta' className='inputTextD text-right w-48 text-gray-600' required />
+			</div>
+
+		</div>
 	);
 };
 
