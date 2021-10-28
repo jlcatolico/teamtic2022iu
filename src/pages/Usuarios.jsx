@@ -270,7 +270,7 @@ const FilaUsuarios = ({ usuario, setEjecutarConsulta }) => {
 				<>
 					<td className='p-4'>
 						<input
-							type='number'
+							type='text'
 							value={nuevoUsuario.identificacion}
 							className='inputSearch'
 							onChange={(e) => setnuevoUsuario({ ...nuevoUsuario, identificacion: e.target.value })}></input>
@@ -360,7 +360,7 @@ const FormularioCreacionUsuarios = ({ setMostrarTabla }) => {
 		const options = {
 			method: 'POST',
 			url: 'https://frozen-river-09078.herokuapp.com/usuarios/',
-			headers: { 'Content-Type': 'application/json', Autorization: getToken()},
+			headers: { 'Content-Type': 'application/json', Autorization: getToken() },
 			data: {
 				identificacion: nuevoUsuario.identificacion,
 				nombre: nuevoUsuario.nombre,

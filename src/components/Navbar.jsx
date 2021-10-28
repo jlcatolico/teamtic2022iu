@@ -15,7 +15,7 @@ const Navbar = () => {
 
 
 	return (
-		<nav className='bg-gradient-to-r from-white via-yellow-400 to-yellow-600'>
+		<nav className='bg-gray-200'>
 			<div className='mx-auto my-auto px-2 sm:px-6 lg:px-8'>
 				<div className='relative flex items-center justify-between h-16'>
 					<div className='absolute inset-y-0 left-0 flex items-center sm:hidden'>

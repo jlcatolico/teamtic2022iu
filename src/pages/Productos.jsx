@@ -114,7 +114,7 @@ const TablaProductos = ({ listaProductos, setEjecutarConsulta }) => {
 							</div>
 
 							<table className='min-w-full divide-y divide-gray-200'>
-								<thead className='bg-gray-300'>
+								<thead className='bg-gray-50'>
 									<tr>
 										<th scope='col' className='labelTable'>
 											ID Producto
