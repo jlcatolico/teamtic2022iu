@@ -1,22 +1,30 @@
-import React ,{ useEffect, useState, useRef } from 'react';
-import {Link} from 'react-router-dom';
+import React, { useEffect, useState, useRef } from 'react';
+import { Link } from 'react-router-dom';
 import axios from "axios";
 
 
 
 const VentasListar = () => {
 
-	const[ventas, setVentas] = useState([]);
+	const [ventas, setVentas] = useState([]);
+	const [ejecutarConsulta, setEjecutarConsulta] = useState([]);
 
 
 	useEffect(() => {
-		const options = { method: 'GET', url: 'http://localhost:5000/ventas/' };
-		axios.request(options).then(function (response) {
-			console.log(response.data);
-			setVentas(response.data)
-		}).catch(function (error) {
-			console.error(error);
-		});}, []);
+		const obtenerVentas = async () => {
+			const options = { method: 'GET', url: 'http://localhost:5000/ventas/' };
+			axios.request(options).then(function (response) {
+				console.log(response.data);
+				setVentas(response.data)
+			}).catch(function (error) {
+				console.error(error);
+			});
+		};
+		if (ejecutarConsulta) {
+			obtenerVentas();
+			setEjecutarConsulta(false);
+		}
+	}, [ejecutarConsulta]);
 
 
 
