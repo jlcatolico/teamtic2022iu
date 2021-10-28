@@ -43,7 +43,7 @@ const Navbar = () => {
 					<div className='absolute inset-y-0 right-0 flex items-center pr-2 sm:static sm:inset-auto sm:ml-6 sm:pr-0'>
 						<div className='flex items-center'>
 							<div >
-								<span className='text-xs p-3 text-gray-800'>{user.name}</span>
+								<span className=' p-3 text-gray-800'>{user.name}</span>
 							</div>
 							<img src={user.picture} className='rounded-full w-12' />
 						</div>
@@ -52,7 +52,7 @@ const Navbar = () => {
 								<button
 									onClick={() => cerrarSession()}
 									type='button'
-									className='bg-green-700 hover:bg-green-600 p-2 rounded-lg text-gray-200 text-xs hover:text-white focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-white'
+									className='bg-green-600 hover:bg-green-500 p-2 rounded-lg text-white hover:text-white focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-white'
 									id='user-menu-button'
 									aria-expanded='false'
 									aria-haspopup='true'>

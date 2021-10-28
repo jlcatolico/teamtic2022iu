@@ -4,6 +4,8 @@ import axios from 'axios';
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import { nanoid } from 'nanoid';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faArrowLeft, faPlus } from '@fortawesome/free-solid-svg-icons';
 
 const getToken = () => {
 	return `Bearer ${localStorage.getItem('token')}`;
@@ -13,6 +15,7 @@ const getToken = () => {
 const Productos = () => {
 	const [mostrarTabla, setMostrarTabla] = useState(true);
 	const [textoBoton, setTextoBoton] = useState('Crear Producto');
+	const [iconoBoton, setIconoBoton] = useState('faPlus');
 	const [productos, setProductos] = useState([]);
 	const [ejecutarConsulta, setEjecutarConsulta] = useState([]);
 
@@ -50,25 +53,30 @@ const Productos = () => {
 
 	useEffect(() => {
 		if (mostrarTabla) {
-			setTextoBoton('+ Crear Producto');
+			setTextoBoton('Crear Producto');
+			setIconoBoton(faPlus);
+			console.log(iconoBoton);
 		} else {
 			setTextoBoton('Mostrar Productos');
+			setIconoBoton(faArrowLeft);
 		}
 	}, [mostrarTabla]);
 
 	return (
-		<div className='w-5/6'>
-			<div className=' my-4 w-full  p-2'>
-				<span className='text-gray-600 p-2 w-full text-2xl'>Administracion de Productos</span>
-			</div>
-			<div className='w-full flex justify-end'>
-				<button
-					onClick={() => {
-						setMostrarTabla(!mostrarTabla);
-					}}
-					className='text-white bg-green-500 p-3 rounded-lg bottom-4 hover:bg-green-600 '>
-					{textoBoton}
-				</button>
+		<div className='w-11/12'>
+			<div className='flex justify-evenly'>
+				<div className=' my-4 p-2 w-4/6'>
+					<span className='p-2 w-full text-2xl'>Administracion de Productos</span>
+				</div>
+				<div className=' w-2/6 flex items-center'>
+					<div className='w-full flex justify-end items-center'>
+						<button onClick={() => { setMostrarTabla(!mostrarTabla); }}
+							className='normalButton'>
+							<FontAwesomeIcon icon={iconoBoton} className='m-1 align-middle mx-2' />
+							{textoBoton}
+						</button>
+					</div>
+				</div>
 			</div>
 			<div>
 				{mostrarTabla ? <TablaProductos listaProductos={productos} setEjecutarConsulta={setEjecutarConsulta} /> : <FormularioCreacionProductos setMostrarTabla={setMostrarTabla} />}
@@ -85,8 +93,6 @@ const TablaProductos = ({ listaProductos, setEjecutarConsulta }) => {
 
 	return (
 		<div className='w-full h-full flex flex-col overflow-hidden'>
-			<h2 className='text-lg font-medium leading-6 text-gray-900 p-3'>Listado de Productos</h2>
-			<br />
 			<div className='-my-2 overflow-x-auto sm:-mx-6 lg:-mx-8'>
 				<div className='py-2 align-middle inline-block min-w-full sm:px-6 lg:px-8'>
 					<div className='shadow overflow-hidden border-b border-gray-200 sm:rounded-lg p-3'>
