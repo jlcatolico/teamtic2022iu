@@ -61,6 +61,10 @@
 	@apply w-full p-1 rounded-md text-gray-600 border-gray-400;
 }
 
+.normalButton{
+	@apply text-white bg-green-500 p-2 rounded-lg hover:bg-green-600 mx-4;
+}
+
 .ImagenIndex {
 	width:max-content;
   	background-image: url("https://www.10wallpaper.com/wallpaper/1366x768/1710/Blur_indoors_items_table_toy_HD_Wallpaper_1366x768.jpg");
