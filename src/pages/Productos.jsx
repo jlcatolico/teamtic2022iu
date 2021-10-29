@@ -327,7 +327,6 @@ const FormularioCreacionProductos = ({ setMostrarTabla }) => {
 		console.log(nuevoProducto);
 		const options = {
 			method: 'POST',
-			//url: 'https://frozen-river-09078.herokuapp.com/productos/',
 			url: 'https://frozen-river-09078.herokuapp.com/productos/',
 			headers: { 'Content-Type': 'application/json', Autorization: getToken(), },
 			data: { id_producto: nuevoProducto.id_producto, descripcion: nuevoProducto.descripcion, precio_unitario: nuevoProducto.precio_unitario, estado: nuevoProducto.estado },
