@@ -15,9 +15,9 @@ const Navbar = () => {
 
 
 	return (
-		<nav className='bg-gradient-to-r from-white via-yellow-400 to-yellow-600'>
+		<nav className='bg-gray-200'>
 			<div className='mx-auto my-auto px-2 sm:px-6 lg:px-8'>
-				<div className='relative flex items-center justify-between h-16'>
+				<div className='relative flex items-center justify-between h-12'>
 					<div className='absolute inset-y-0 left-0 flex items-center sm:hidden'>
 						<button
 							type='button'
@@ -43,16 +43,16 @@ const Navbar = () => {
 					<div className='absolute inset-y-0 right-0 flex items-center pr-2 sm:static sm:inset-auto sm:ml-6 sm:pr-0'>
 						<div className='flex items-center'>
 							<div >
-								<span className='text-xs p-3 text-gray-800'>{user.name}</span>
+								<span className=' p-3 text-gray-800'>{user.name}</span>
 							</div>
-							<img src={user.picture} className='rounded-full w-12' />
+							<img src={user.picture} className='rounded-full w-10' />
 						</div>
 						<div className='ml-3 relative'>
 							<div>
 								<button
 									onClick={() => cerrarSession()}
 									type='button'
-									className='bg-green-700 hover:bg-green-600 p-2 rounded-lg text-gray-200 text-xs hover:text-white focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-white'
+									className='bg-green-600 hover:bg-green-500 p-2 rounded-lg text-white hover:text-white focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-white'
 									id='user-menu-button'
 									aria-expanded='false'
 									aria-haspopup='true'>

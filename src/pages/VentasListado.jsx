@@ -4,6 +4,8 @@ import axios from 'axios';
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import { nanoid } from 'nanoid';
+import { faPlus } from '@fortawesome/free-solid-svg-icons';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 
 const getToken = () => {
 	return `Bearer ${localStorage.getItem('token')}`;
@@ -76,9 +78,10 @@ const VentasListado = () => {
 				</div>
 				<div className=' w-2/6 flex items-center'>
 					<div className='w-full flex justify-end items-center'>
-						<button className='text-white bg-green-500 p-2 rounded-lg hover:bg-green-600 mx-4 '>
+						<button className='normalButton'>
 							<Link to='/Ventas'>
-								+ Crear Venta
+							<FontAwesomeIcon icon={faPlus} className='m-1 align-middle mx-2' />
+								Crear Venta
 							</Link>
 						</button>
 					</div>

@@ -11,7 +11,7 @@ const PrivateLayout = ({ children }) => {
         <Sidebar />
         <div className='flex flex-col h-screen w-screen justify-between'>
           <Navbar />
-          <main className="w-full h-full overflow-y-scroll mx-8">{children}</main>
+          <main className="flex w-full h-full overflow-y-scroll">{children}</main>
           <Footer />
         </div>
 
