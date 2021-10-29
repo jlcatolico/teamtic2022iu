@@ -94,7 +94,7 @@ const Ventas = () => {
 
 		const options = {
 			method: 'POST',
-			url: 'http://localhost:5000/ventas/',
+			url: 'https://frozen-river-09078.herokuapp.com/ventas/',
 			headers: { 'Content-Type': 'application/json', Autorization: getToken(), },
 			data: datosVenta,
 		};

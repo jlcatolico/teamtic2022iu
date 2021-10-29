@@ -6,7 +6,7 @@ const useActiveRoute = (ruta) => {
 	const [isActive, setIsActive] = useState(false);
 
 	useEffect(() => {
-		console.log(location, ruta);
+//		console.log(location, ruta);
 		if (location.pathname.includes(ruta)) {
 			setIsActive(true);
 		} else {

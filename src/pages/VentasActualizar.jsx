@@ -11,8 +11,16 @@ import 'react-toastify/dist/ReactToastify.css';
 import values from 'postcss-modules-values';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faArrowLeft, faCheck, faPlus } from '@fortawesome/free-solid-svg-icons';
+import { useLocation } from 'react-router';
 
-const VentasActualizar = () => {
+const VentasActualizar = (props) => {
+
+	//const { data } = props.location;
+
+	const location = useLocation();
+	const datos = location.data;
+
+	console.log(datos);
 
 	const getToken = () => {
 		return `Bearer ${localStorage.getItem('token')}`;
@@ -28,9 +36,9 @@ const VentasActualizar = () => {
 	const [ventas, setVentas] = useState([]);
 	const [ejecutarConsulta, setEjecutarConsulta] = useState([]);
 	let [total, setTotal] = useState(0);
-	
+
 	const [edit, setEdit] = useState(false);
-	
+
 
 	useEffect(() => {
 
@@ -84,7 +92,7 @@ const VentasActualizar = () => {
 	const submitForm = async (e) => {
 		e.preventDefault();
 		const fd = new FormData(form.current);
-		
+
 		const nuevaVenta = {};
 
 		const formData = {};
@@ -203,11 +211,11 @@ const VentasActualizar = () => {
 									<div className='grid grid-cols-2 items-center'>
 										<label className='tracking-wide mb-2'>Fecha
 										</label>
-										<input type='date' name='fecha' className='inputTextE text-gray-600 w-64' />
+										<input value={datos.fecha} type='date' name='fecha' className='inputTextE text-gray-600 w-64' />
 									</div>
 									<div className='grid grid-cols-2 items-center'>
 										<label className='tracking-wide mb-2' htmlFor='vendedor'>Vendedor</label>
-										<select name='vendedor' className='inputTextE text-gray-600 w-64' defaultValue='' required>
+										<select value={datos.vendedor.nombre} name='vendedor' className='inputTextE text-gray-600 w-64' defaultValue='' required>
 											<option disabled value=''>
 												Seleccione un Vendedor
 											</option>
@@ -217,12 +225,12 @@ const VentasActualizar = () => {
 										</select>
 									</div>
 
-									<TablaProductos productos={productos} setProductos={setProductos} setProductosTabla={setProductosTabla} total={total} setTotal={setTotal} />
+									<TablaProductos productos={productos} setProductos={setProductos} setProductosTabla={setProductosTabla} total={total} setTotal={setTotal} datos={datos} />
 
 									<div className='grid grid-cols-2 items-center'>
 										<label className='tracking-wide mb-2'>Estado
 										</label>
-										<select name='estado' className='inputTextE text-gray-600 w-48'>
+										<select value={datos.estado} name='estado' className='inputTextE text-gray-600 w-48'>
 											<option disabled value=''>Seleccione un Estado</option>
 											<option>En progreso</option>
 											<option>Completada</option>
@@ -247,21 +255,37 @@ const VentasActualizar = () => {
 	);
 };
 
-const TablaProductos = ({ productos, setProductos, setProductosTabla, total, setTotal }) => {
+const TablaProductos = ({ productos, setProductos, setProductosTabla, total, setTotal, datos }) => {
 	const [productoAgregar, setProductoAgregar] = useState({});
 	const [filasTabla, setFilasTabla] = useState([]);
-
 	const [cantidadProducto, setCantidadProducto] = useState([0]);
 
 	useEffect(() => {
-		console.log(productoAgregar);
-	}, [productoAgregar]);
+
+		console.log('productossssss', datos.productos);
+		console.log('filas', filasTabla);
+	
+
+		datos.productos.forEach(function (valor, indice, array) {
+			
+			setFilasTabla([...filasTabla, valor.descripcion ]);
+			console.log('Indice: ' + indice + ' Valor: ' + valor.descripcion);
+			console.log('Filastabla: ', filasTabla);
+		});
+	}, []);
+
+	
+
 
 	useEffect(() => {
-		console.log('filasTabla', filasTabla);
+		//console.log(productoAgregar);
+	}, [productoAgregar]);
+
+/* 	useEffect(() => {
+		//console.log('filasTabla', filasTabla);
 		setProductosTabla(filasTabla);
 	}, [filasTabla, setProductosTabla]);
-
+ */
 	const agregarNuevoProducto = () => {
 
 		console.log('valor unitario', productoAgregar["precio_unitario"]);

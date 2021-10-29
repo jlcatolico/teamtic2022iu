@@ -12,16 +12,22 @@ const getToken = () => {
 const VentasListado = () => {
 
 	const [ventas, setVentas] = useState([]);
+
+	//let [ventapru, setVentapru] = useState([0]);
+	//setVentapru(12345);
+
 	const [ejecutarConsulta, setEjecutarConsulta] = useState([]);
 
 	const form = useRef(null);
 
 	useEffect(() => {
 		const obtenerVentas = async () => {
-			const options = { method: 'GET', url: 'https://frozen-river-09078.herokuapp.com/ventas/',
-			headers: {
-				Autorization: getToken(),
-			}};
+			const options = {
+				method: 'GET', url: 'https://frozen-river-09078.herokuapp.com/ventas/',
+				headers: {
+					Autorization: getToken(),
+				}
+			};
 
 			await axios
 				.request(options)
@@ -144,7 +150,8 @@ const VentasListado = () => {
 												<td className='spaceTable resultTable'>{venta.estado}</td>
 												<td className='resultTable spaceTable font-medium'>
 													<div className='flex w-full justify-around'>
-														<Link to='/VentasActualizar'>
+														
+														<Link to={{ pathname: '/VentasActualizar', data: venta }}>
 															<i className='fas fa-pencil-alt text-yellow-600 hover:text-yellow-300' />
 														</Link>
 
@@ -201,6 +208,7 @@ const VentasListado = () => {
 			</div>
 		</div>
 	);
+	
 };
 
 
