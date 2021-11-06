@@ -14,16 +14,22 @@ const getToken = () => {
 const VentasListado = () => {
 
 	const [ventas, setVentas] = useState([]);
+
+	//let [ventapru, setVentapru] = useState([0]);
+	//setVentapru(12345);
+
 	const [ejecutarConsulta, setEjecutarConsulta] = useState([]);
 
 	const form = useRef(null);
 
 	useEffect(() => {
 		const obtenerVentas = async () => {
-			const options = { method: 'GET', url: 'https://frozen-river-09078.herokuapp.com/ventas/',
-			headers: {
-				Autorization: getToken(),
-			}};
+			const options = {
+				method: 'GET', url: 'https://frozen-river-09078.herokuapp.com/ventas/',
+				headers: {
+					Autorization: getToken(),
+				}
+			};
 
 			await axios
 				.request(options)
@@ -42,7 +48,7 @@ const VentasListado = () => {
 		}
 	}, [ejecutarConsulta]);
 
-	const eliminarVenta = async (venta, setEjecutarConsulta) => {
+	const eliminarVenta = async (venta) => {
 		const options = {
 			method: 'DELETE',
 			url: `https://frozen-river-09078.herokuapp.com/ventas/${venta._id}`,
@@ -147,11 +153,12 @@ const VentasListado = () => {
 												<td className='spaceTable resultTable'>{venta.estado}</td>
 												<td className='resultTable spaceTable font-medium'>
 													<div className='flex w-full justify-around'>
-														<Link to='/VentasActualizar'>
+														
+														<Link to={{ pathname: '/VentasActualizar', data: venta }}>
 															<i className='fas fa-pencil-alt text-yellow-600 hover:text-yellow-300' />
 														</Link>
 
-														<i onClick={() => eliminarVenta()} className='fas fa-trash text-red-600 hover:text-red-300'></i>
+														<i onClick={() => eliminarVenta(venta)} className='fas fa-trash text-red-600 hover:text-red-300'></i>
 													</div>
 												</td>
 											</tr>
@@ -160,6 +167,8 @@ const VentasListado = () => {
 									</tbody>
 								</table>
 							</form>
+
+							<ToastContainer position='bottom-center' autoClose={2000} />
 						</div>
 					</div>
 				</div>
@@ -204,6 +213,7 @@ const VentasListado = () => {
 			</div>
 		</div>
 	);
+	
 };
 
 
