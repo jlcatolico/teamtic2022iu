@@ -48,7 +48,7 @@ const VentasListado = () => {
 		}
 	}, [ejecutarConsulta]);
 
-	const eliminarVenta = async (venta, setEjecutarConsulta) => {
+	const eliminarVenta = async (venta) => {
 		const options = {
 			method: 'DELETE',
 			url: `https://frozen-river-09078.herokuapp.com/ventas/${venta._id}`,
@@ -158,7 +158,7 @@ const VentasListado = () => {
 															<i className='fas fa-pencil-alt text-yellow-600 hover:text-yellow-300' />
 														</Link>
 
-														<i onClick={() => eliminarVenta()} className='fas fa-trash text-red-600 hover:text-red-300'></i>
+														<i onClick={() => eliminarVenta(venta)} className='fas fa-trash text-red-600 hover:text-red-300'></i>
 													</div>
 												</td>
 											</tr>
@@ -167,6 +167,8 @@ const VentasListado = () => {
 									</tbody>
 								</table>
 							</form>
+
+							<ToastContainer position='bottom-center' autoClose={2000} />
 						</div>
 					</div>
 				</div>

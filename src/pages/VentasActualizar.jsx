@@ -20,7 +20,7 @@ const VentasActualizar = (props) => {
 	const location = useLocation();
 	const datos = location.data;
 
-	console.log(datos);
+	//console.log(datos);
 
 	const getToken = () => {
 		return `Bearer ${localStorage.getItem('token')}`;
@@ -65,14 +65,14 @@ const VentasActualizar = (props) => {
 		};
 
 		const obtenerVentas = async () => {
-			const options = { method: 'GET', url: 'http://localhost:5000/ventas/' };
+			const options = { method: 'GET', url: 'https://frozen-river-09078.herokuapp.com/ventas/' };
 
 			await axios
 				.request(options)
 				.then(function (response) {
 					setVentas(response.data);
-					console.log(ventas);
-					console.log(response.data);
+					//console.log(ventas);
+					//console.log(response.data);
 				})
 				.catch(function (error) {
 					console.error(error);
@@ -111,19 +111,7 @@ const VentasActualizar = (props) => {
 			})
 			.filter((v) => v);
 
-		console.log('lista antes de cantidad', listaProductos);
 
-
-		console.log('lista después de cantidad y valor total', listaProductos);
-
-		// const [nuevaVenta, setNuevaVenta] = useState({
-		// 	vendedor: vendedores.filter((v) => v._id === formData.vendedor)[0],
-		// 	cantidad: formData.valor_venta,
-		// 	productos: listaProductos,
-		// 	totalVenta: formData.totalVenta,
-		// 	fecha: formData.fecha,
-		// 	estado: formData.estado
-		// });
 
 		const datosVenta = {
 			vendedor: vendedores.filter((v) => v._id === formData.vendedor)[0],
@@ -134,50 +122,28 @@ const VentasActualizar = (props) => {
 			estado: formData.estado
 		};
 
-		// const options = {
-		// 	method: 'POST',
-		// 	url: 'http://localhost:5000/ventas/',
-		// 	headers: { 'Content-Type': 'application/json', Autorization: getToken(), },
-		// 	data: datosVenta,
-		// };
 
-		// console.log('option ejecutados');
 
-		// await axios.request(options)
-		// 	.then(function (response) {
-		// 		console.log(response.data);
-		// 	})
-		// 	.catch(function (error) {
-		// 		console.log('error');
-		// 		console.error(error);
-		// 	});
-		// console.log('enviado');
-		// toast.success('venta agregada con exito');
-		// history.push('/VentasListado');
-
-		const actualizarVenta = async () => {
-			console.log(nuevaVenta);
-
-			const options = {
-				method: 'PATCH',
-				url: `http://localhost:5000/ventasactualizar/${ventas._id}`,
-				headers: { 'Content-Type': 'application/json' },
-				data: { ...datosVenta },
-			};
-
-			await axios
-				.request(options)
-				.then(function (response) {
-					console.log(response.data);
-					toast.success('Vetnta modificada con exito');
-					setEjecutarConsulta(true);
-					setEdit(false);
-				})
-				.catch(function (error) {
-					console.error(error);
-					toast.error('La venta no se pudo modificar');
-				});
+		const options = {
+			method: 'PATCH',
+			url: `https://frozen-river-09078.herokuapp.com/ventas/${datos._id}`,
+			headers: { 'Content-Type': 'application/json' },
+			data: { ...datosVenta },
 		};
+
+		await axios
+			.request(options)
+			.then(function (response) {
+				//console.log(response.data);
+				toast.success('Vetnta modificada con exito');
+				setEjecutarConsulta(true);
+				setEdit(false);
+			})
+			.catch(function (error) {
+				console.error(error);
+				toast.error('La venta no se pudo modificar');
+			});
+
 
 	};
 
@@ -215,7 +181,7 @@ const VentasActualizar = (props) => {
 									</div>
 									<div className='grid grid-cols-2 items-center'>
 										<label className='tracking-wide mb-2' htmlFor='vendedor'>Vendedor</label>
-										<select value={datos.vendedor.nombre} name='vendedor' className='inputTextE text-gray-600 w-64' defaultValue='' required>
+										<select value={datos.vendedor._id} name='vendedor' className='inputTextE text-gray-600 w-64' defaultValue='' required>
 											<option disabled value=''>
 												Seleccione un Vendedor
 											</option>
@@ -240,7 +206,7 @@ const VentasActualizar = (props) => {
 									<div className='grid justify-items-center'>
 										<button type='submit' className='normalButton justify-items-center my-10'>
 											<FontAwesomeIcon icon={faCheck} className='m-1 align-middle mx-2' />
-											Crear Venta
+											Modificar Venta
 										</button>
 									</div>
 								</div>
@@ -257,51 +223,42 @@ const VentasActualizar = (props) => {
 
 const TablaProductos = ({ productos, setProductos, setProductosTabla, total, setTotal, datos }) => {
 	const [productoAgregar, setProductoAgregar] = useState({});
-	const [filasTabla, setFilasTabla] = useState([]);
+	const [filasTabla, setFilasTabla] = useState(datos.productos);
 	const [cantidadProducto, setCantidadProducto] = useState([0]);
+	const [modificar, setModificar] = useState(true);
 
 	useEffect(() => {
 
-		console.log('productossssss', datos.productos);
-		console.log('filas', filasTabla);
-	
+		setTotal(datos.totalVenta);
 
-		datos.productos.forEach(function (valor, indice, array) {
-			
-			setFilasTabla([...filasTabla, valor.descripcion ]);
-			console.log('Indice: ' + indice + ' Valor: ' + valor.descripcion);
-			console.log('Filastabla: ', filasTabla);
-		});
+		console.log('Filas tabla 1: ', filasTabla);
+
+		//	});
 	}, []);
 
-	
-
 
 	useEffect(() => {
-		//console.log(productoAgregar);
-	}, [productoAgregar]);
-
-/* 	useEffect(() => {
-		//console.log('filasTabla', filasTabla);
+		console.log('filasTabla useefect', filasTabla);
 		setProductosTabla(filasTabla);
 	}, [filasTabla, setProductosTabla]);
- */
-	const agregarNuevoProducto = () => {
 
-		console.log('valor unitario', productoAgregar["precio_unitario"]);
+	const agregarNuevoProducto = async (modificar) => {
+
+		console.log('Ingreso a nuevo producto ', productoAgregar);
+
 
 		const valorTotal = parseInt(productoAgregar["precio_unitario"]) * parseInt(cantidadProducto);
 		const ventaAcomulada = parseInt(total) + parseInt(valorTotal);
 
-		console.log('total producto', valorTotal);
-		console.log('total venta acomulada', ventaAcomulada);
+		//console.log('total producto', valorTotal);
+		//console.log('total venta acomulada', ventaAcomulada);
 
 		productoAgregar['cantidad'] = cantidadProducto;
 		productoAgregar['valor_total'] = valorTotal;
 
 		setTotal(ventaAcomulada);
 
-		console.log('producto con cantidad', productoAgregar);
+		//console.log('producto con cantidad', productoAgregar);
 
 		if (productoAgregar.id_producto) {
 
@@ -309,10 +266,10 @@ const TablaProductos = ({ productos, setProductos, setProductosTabla, total, set
 
 				setFilasTabla([...filasTabla, productoAgregar]);
 				setProductos(productos.filter((v) => v._id !== productoAgregar._id));
-				console.log(productoAgregar);
+				//		console.log(productoAgregar);
 				setProductoAgregar({});
 			} else {
-				console.error('cantidad en cero')
+				//		console.error('cantidad en cero')
 				toast.error('La cantidad debe ser mayor a cero');
 			}
 
@@ -360,7 +317,7 @@ const TablaProductos = ({ productos, setProductos, setProductosTabla, total, set
 				</label>
 
 				<label htmlFor='cantidad' className='mx-3'>Cantidad
-					<input type='number' name='cantidad' className='spacetable inputTextE w-24 mx-3' onChange={(e) => setCantidadProducto(e.target.value)} required />
+					<input type='number' name='cantidad' className='spacetable inputTextE w-24 mx-3' onChange={(e) => setCantidadProducto(e.target.value)} />
 				</label>
 
 
@@ -414,7 +371,7 @@ const TablaProductos = ({ productos, setProductos, setProductosTabla, total, set
 				<label className='tracking-wide mb-2'>
 					Valor Total Venta
 				</label>
-				<input readOnly='readonly' type='number' value={total} name='totalVenta' id='totalVenta' className='inputTextD text-right w-48 text-gray-600' required />
+				<input readOnly='readonly' value={total} type='number' name='totalVenta' id='totalVenta' className='inputTextD text-right w-48 text-gray-600' required />
 			</div>
 
 		</div>

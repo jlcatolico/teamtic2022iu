@@ -204,7 +204,7 @@ const FilaPoducto = ({ producto, setEjecutarConsulta }) => {
 		estado: producto.estado,
 	});
 
-	const actualizarVehiculo = async () => {
+	const actualizarProducto = async () => {
 		console.log(nuevoProducto);
 
 		const options = {
@@ -228,7 +228,7 @@ const FilaPoducto = ({ producto, setEjecutarConsulta }) => {
 			});
 	};
 
-	const eliminarVehiculo = async () => {
+	const eliminarProducto = async () => {
 		const options = {
 			method: 'DELETE',
 			url: `https://frozen-river-09078.herokuapp.com/productos/${producto._id}`,
@@ -300,12 +300,12 @@ const FilaPoducto = ({ producto, setEjecutarConsulta }) => {
 			<td className='resultTable spaceTable font-medium'>
 				<div className='flex w-full justify-around'>
 					{edit ? (
-						<i onClick={() => actualizarVehiculo()} className='fas fa-check text-green-600 hover:text-green-300' />
+						<i onClick={() => actualizarProducto()} className='fas fa-check text-green-600 hover:text-green-300' />
 					) : (
 						<i onClick={() => setEdit(!edit)} className='fas fa-pencil-alt text-yellow-600 hover:text-yellow-300' />
 					)}
 
-					<i onClick={() => eliminarVehiculo()} className='fas fa-trash text-red-600 hover:text-red-300'></i>
+					<i onClick={() => eliminarProducto()} className='fas fa-trash text-red-600 hover:text-red-300'></i>
 				</div>
 			</td>
 		</tr>
