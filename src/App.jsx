@@ -33,7 +33,8 @@ function App() {
 			domain='misiontic-teamtic2022.us.auth0.com'
 			clientId='MIcna23UC1pxqrntWCDKM22RQAz4MsyY'
 			audience='api-autenticacion-gestorventas-teamtic'
-			redirectUri='http://localhost:3000/inside'
+			//redirectUri='http://localhost:3000/inside'
+			redirectUri='https://still-woodland-55233.herokuapp.com/inside'
 			>
 			<div>
 				<Router>
