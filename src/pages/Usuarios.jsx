@@ -4,16 +4,17 @@ import axios from 'axios';
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import { nanoid } from 'nanoid';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faArrowLeft, faCheck, faPlus } from '@fortawesome/free-solid-svg-icons';
 
 const getToken = () => {
 	return `Bearer ${localStorage.getItem('token')}`;
 };
 
-
-
 const Usuarios = () => {
 	const [mostrarTabla, setMostrarTabla] = useState(true);
 	const [textoBoton, setTextoBoton] = useState('Crear Usuario');
+	const [iconoBoton, setIconoBoton] = useState('faPlus');
 	const [usuarios, setUsuarios] = useState([]);
 	const [ejecutarConsulta, setEjecutarConsulta] = useState([]);
 
@@ -51,9 +52,12 @@ const Usuarios = () => {
 
 	useEffect(() => {
 		if (mostrarTabla) {
-			setTextoBoton('+ Crear Usuario');
+			setTextoBoton('Crear Usuario');
+			setIconoBoton(faPlus);
+			console.log(iconoBoton);
 		} else {
 			setTextoBoton('Mostrar Usuarios');
+			setIconoBoton(faArrowLeft);
 		}
 	}, [mostrarTabla]);
 
@@ -65,11 +69,9 @@ const Usuarios = () => {
 				</div>
 				<div className=' w-2/6 flex items-center'>
 					<div className='w-full flex justify-end items-center'>
-						<button
-							onClick={() => {
-								setMostrarTabla(!mostrarTabla);
-							}}
-							className='text-white bg-green-500 p-2 rounded-lg hover:bg-green-600 mx-4 '>
+						<button onClick={() => { setMostrarTabla(!mostrarTabla); }}
+							className='searchButton'>
+							<FontAwesomeIcon icon={iconoBoton} className='m-1 align-middle mx-2' />
 							{textoBoton}
 						</button>
 					</div>
@@ -88,42 +90,26 @@ const TablaUsuarios = ({ listaUsuarios, setEjecutarConsulta }) => {
 
 	const sumitEdit = (e) => { };
 
+	const [busqueda, setBusqueda] = useState('');
+	const [usuariosFiltrados, setUsuariosFiltrados] = useState(listaUsuarios);
+
+	useEffect(() => {
+		setUsuariosFiltrados(
+			listaUsuarios.filter((elemento) => {
+				return JSON.stringify(elemento).toLowerCase().includes(busqueda.toLowerCase());
+			})
+		);
+	}, [busqueda, listaUsuarios]);
+
 	return (
 		<div className='w-full h-full flex flex-col overflow-hidden'>
 			<div className='-my-2 overflow-x-auto sm:-mx-6 lg:-mx-8'>
 				<div className='py-2 align-middle inline-block min-w-full sm:px-6 lg:px-8'>
-					<div className='shadow overflow-hidden border-b border-gray-200 sm:rounded-lg p-3'>
-						<h1>Búsqueda</h1>
+					<div className='shadow overflow-hidden border-b border-gray-200 sm:rounded-lg p-4'>
 						<form>
-							<div className='my-6 row flex flex-row justify-evenly items-center'>
-								<label htmlFor='correo' className='labelSearch'>
-									Correo
-								</label>
-								<input type='email' name='correo' id='correo' autoComplete='correo' className='inputSearch' />
-								<label htmlFor='rol' className='labelSearch'>
-									Rol
-								</label>
-								<select id='rol' name='rol' autoComplete='rol' className='inputSearch'>
-									<option disabled value={0}>
-										Seleccionar
-									</option>
-									<option>Administrador</option>
-									<option>Vendedor</option>
-								</select>
-								<label htmlFor='estado' className='labelSearch'>
-									Estado
-								</label>
-								<select id='estado' name='estado' autoComplete='estado' className='inputSearch'>
-									<option disabled value={0}>
-										Seleccionar
-									</option>
-									<option>Pendiente</option>
-									<option>Activo</option>
-									<option>Inactivo</option>
-								</select>
-								<button type='submit' className='searchButton'>
-									Buscar
-								</button>
+							<div className='my-3 row flex flex-row items-center'>
+								<h1 className='mr-5'>Búsqueda</h1>
+								<input type='text' id='id_producto' className='inputSearch' value={busqueda} onChange={(e) => setBusqueda(e.target.value)} placeholder="Ingrese búsqueda" />
 							</div>
 
 							<table className='min-w-full divide-y divide-gray-200'>
@@ -147,13 +133,13 @@ const TablaUsuarios = ({ listaUsuarios, setEjecutarConsulta }) => {
 										<th scope='col' className='labelTable'>
 											Rol
 										</th>
-										<th scope='col' className='labelTable'>
+										<th scope='col' className='labelTable flex justify-center'>
 											Acciones
 										</th>
 									</tr>
 								</thead>
 								<tbody className='bg-white divide-y divide-gray-200'>
-									{listaUsuarios.map((usuario) => (
+									{usuariosFiltrados.map((usuario) => (
 										<FilaUsuarios key={nanoid()} usuario={usuario} setEjecutarConsulta={setEjecutarConsulta} />
 									))}
 								</tbody>
@@ -268,23 +254,19 @@ const FilaUsuarios = ({ usuario, setEjecutarConsulta }) => {
 		<tr>
 			{edit ? (
 				<>
-					<td className='p-4'>
-						<input
-							type='text'
-							value={nuevoUsuario.identificacion}
-							className='inputSearch'
-							onChange={(e) => setnuevoUsuario({ ...nuevoUsuario, identificacion: e.target.value })}></input>
+					<td className='p-2'>
+						<input type='text' value={nuevoUsuario.identificacion} className='listado text-gray-900' onChange={(e) => setnuevoUsuario({ ...nuevoUsuario, identificacion: e.target.value })}></input>
 					</td>
-					<td className='p-4'>
+					<td className='p-2'>
 						<input type='text' value={nuevoUsuario.nombre} className='listado' onChange={(e) => setnuevoUsuario({ ...nuevoUsuario, nombre: e.target.value })}></input>
 					</td>
-					<td className='p-4'>
+					<td className='p-2'>
 						<input type='text' value={nuevoUsuario.apellido} className='listado' onChange={(e) => setnuevoUsuario({ ...nuevoUsuario, apellido: e.target.value })}></input>
 					</td>
-					<td className='p-4'>
+					<td className='p-2'>
 						<input type='email' value={nuevoUsuario.correo} className='listado' onChange={(e) => setnuevoUsuario({ ...nuevoUsuario, correo: e.target.value })}></input>
 					</td>
-					<td className='p-4'>
+					<td className='p-2'>
 						<select
 							id='estado'
 							value={nuevoUsuario.estado}
@@ -301,7 +283,7 @@ const FilaUsuarios = ({ usuario, setEjecutarConsulta }) => {
 							<option>Inactivo</option>
 						</select>
 					</td>
-					<td className='p-4'>
+					<td className='p-2'>
 						<select
 							id='estado'
 							value={nuevoUsuario.rol}
@@ -334,10 +316,10 @@ const FilaUsuarios = ({ usuario, setEjecutarConsulta }) => {
 					{edit ? (
 						<i onClick={() => actualizarUsuario()} className='fas fa-check text-green-600 hover:text-green-300' />
 					) : (
-						<i onClick={() => setEdit(!edit)} className='fas fa-pencil-alt text-yellow-600 hover:text-yellow-300' />
+						<i onClick={() => setEdit(!edit)} className='fas fa-pen text-yellow-400 hover:text-yellow-200' />
 					)}
 
-					<i onClick={() => eliminarUsuario()} className='fas fa-trash text-red-600 hover:text-red-300'></i>
+					<i onClick={() => eliminarUsuario()} className='fas fa-times text-red-600 hover:text-red-300'></i>
 				</div>
 			</td>
 		</tr>
@@ -403,19 +385,19 @@ const FormularioCreacionUsuarios = ({ setMostrarTabla }) => {
 								<input type='number' name='identificacion' id='identificacion' className='inputTextE ' required />
 							</div>
 							<div>
-								<label className=' tracking-wide mb-2 text-gray-600' htmlFor='Descripcion'>
+								<label className=' tracking-wide mb-2 text-gray-600' htmlFor='Nombre'>
 									Nombre
 								</label>
 								<input type='text' name='nombre' id='nombre' className='inputTextE' required />
 							</div>
 							<div>
-								<label className=' tracking-wide mb-2 text-gray-600' htmlFor='Descripcion'>
+								<label className=' tracking-wide mb-2 text-gray-600' htmlFor='Apellido'>
 									Apellido
 								</label>
 								<input type='text' name='apellido' id='apellido' className='inputTextE' required />
 							</div>
 							<div>
-								<label className=' tracking-wide mb-2 text-gray-600' htmlFor='ValorUnitario'>
+								<label className=' tracking-wide mb-2 text-gray-600' htmlFor='Correo'>
 									Correo
 								</label>
 								<input type='email' name='correo' id='correo' className='inputTextE' required />
@@ -447,7 +429,7 @@ const FormularioCreacionUsuarios = ({ setMostrarTabla }) => {
 								</select>
 							</div>
 							<div className='my-8'>
-								<button type='submit' className='w-full bg-indigo-500 text-white p-2 rounded-lg hover:bg-indigo-600'>
+								<button type='submit' className='w-full bg-indigo-500 text-white p-2 rounded-lg hover:bg-indigo-600 focus:outline-none'>
 									Guardar
 								</button>
 							</div>

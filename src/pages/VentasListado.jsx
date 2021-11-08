@@ -48,6 +48,18 @@ const VentasListado = () => {
 		}
 	}, [ejecutarConsulta]);
 
+	const [busqueda, setBusqueda] = useState('');
+	const [ventasFiltradas, setVentasFiltradas] = useState(ventas);
+
+	useEffect(() => {
+		setVentasFiltradas(
+			ventas.filter((elemento) => {
+				return JSON.stringify(elemento).toLowerCase().includes(busqueda.toLowerCase());
+			})
+		);
+	}, [busqueda, ventas]);
+
+
 	const eliminarVenta = async (venta) => {
 		const options = {
 			method: 'DELETE',
@@ -78,9 +90,9 @@ const VentasListado = () => {
 				</div>
 				<div className=' w-2/6 flex items-center'>
 					<div className='w-full flex justify-end items-center'>
-						<button className='normalButton'>
+						<button className='searchButton'>
 							<Link to='/Ventas'>
-							<FontAwesomeIcon icon={faPlus} className='m-1 align-middle mx-2' />
+								<FontAwesomeIcon icon={faPlus} className='m-1 align-middle mx-2' />
 								Crear Venta
 							</Link>
 						</button>
@@ -90,33 +102,11 @@ const VentasListado = () => {
 			<div className='w-full h-full flex flex-col overflow-hidden'>
 				<div className='-my-2 overflow-x-auto sm:-mx-6 lg:-mx-8'>
 					<div className='py-2 align-middle inline-block min-w-full sm:px-6 lg:px-8'>
-						<div className='shadow overflow-hidden border-b border-gray-200 sm:rounded-lg p-3'>
-							<h1>Búsqueda</h1>
+						<div className='shadow overflow-hidden border-b border-gray-200 sm:rounded-lg p-4'>
 							<form>
-								<div className='my-6 row flex flex-row justify-evenly items-center'>
-									<label htmlFor='fecha' className='labelSearch'>
-										Fecha Venta
-									</label>
-									<input type='date' name='fecha' id='fecha' autoComplete='fecha' className='inputSearch' />
-
-									<label htmlFor='vendedor' className='labelSearch'>
-										Vendedor
-									</label>
-									<input type='text' name='id_ventvendedor' id='id_ventvendedor' autoComplete='id_ventvendedor' className='inputSearch' />
-									<label htmlFor='estado' className='labelSearch'>
-										Estado
-									</label>
-									<select id='estado' name='estado' autoComplete='estado' className='inputSearch'>
-										<option disabled value={0}>
-											Seleccionar
-										</option>
-										<option>En proceso</option>
-										<option>Entregada</option>
-										<option>Cancelada</option>
-									</select>
-									<button type='submit' className='searchButton'>
-										Buscar
-									</button>
+								<div className='my-3 row flex flex-row items-center'>
+									<h1 className='mr-5'>Búsqueda</h1>
+									<input type='text' id='id_producto' className='inputSearch' value={busqueda} onChange={(e) => setBusqueda(e.target.value)} placeholder="Ingrese búsqueda" />
 								</div>
 
 								<table className='min-w-full divide-y divide-gray-200'>
@@ -137,13 +127,13 @@ const VentasListado = () => {
 											<th scope='col' className='labelTable'>
 												Estado
 											</th>
-											<th scope='col' className='labelTable'>
+											<th scope='col' className='labelTable flex justify-center'>
 												Acciones
 											</th>
 										</tr>
 									</thead>
 									<tbody className='bg-white divide-y divide-gray-200'>
-										{ventas.map((venta) => (
+										{ventasFiltradas.map((venta) => (
 											<tr key={nanoid()}>
 
 												<td className='spaceTable resultTable text-gray-900 font-medium '>{venta._id.substring(0, 10)}</td>
@@ -153,12 +143,10 @@ const VentasListado = () => {
 												<td className='spaceTable resultTable'>{venta.estado}</td>
 												<td className='resultTable spaceTable font-medium'>
 													<div className='flex w-full justify-around'>
-														
 														<Link to={{ pathname: '/VentasActualizar', data: venta }}>
-															<i className='fas fa-pencil-alt text-yellow-600 hover:text-yellow-300' />
+															<i className='fas fa-pen text-yellow-400 hover:text-yellow-200' />
 														</Link>
-
-														<i onClick={() => eliminarVenta(venta)} className='fas fa-trash text-red-600 hover:text-red-300'></i>
+														<i onClick={() => eliminarVenta(venta)} className='fas fa-times text-red-600 hover:text-red-300'></i>
 													</div>
 												</td>
 											</tr>
@@ -213,7 +201,7 @@ const VentasListado = () => {
 			</div>
 		</div>
 	);
-	
+
 };
 
 

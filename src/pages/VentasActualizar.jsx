@@ -135,7 +135,7 @@ const VentasActualizar = (props) => {
 			.request(options)
 			.then(function (response) {
 				//console.log(response.data);
-				toast.success('Vetnta modificada con exito');
+				toast.success('Venta modificada con éxito');
 				setEjecutarConsulta(true);
 				setEdit(false);
 			})
@@ -155,7 +155,7 @@ const VentasActualizar = (props) => {
 				</div>
 				<div className=' w-2/6 flex items-center'>
 					<div className='w-full flex justify-end items-center'>
-						<button className='normalButton'>
+						<button className='searchButton'>
 							<Link to='/VentasListado'>
 								<FontAwesomeIcon icon={faArrowLeft} className='m-1 align-middle mx-2' />
 								Regresar
@@ -167,7 +167,7 @@ const VentasActualizar = (props) => {
 
 			<div className='grid justify-items-center'>
 				<div className='my-3'>
-					<h2 className='text-lg font-medium text-gray-600'>Nueva Venta</h2>
+					<h2 className='text-lg font-medium text-gray-600'>Editar Venta</h2>
 				</div>
 				<div className='my-3'>
 					<form ref={form} onSubmit={submitForm}>
@@ -205,8 +205,10 @@ const VentasActualizar = (props) => {
 									</div>
 									<div className='grid justify-items-center'>
 										<button type='submit' className='normalButton justify-items-center my-10'>
-											<FontAwesomeIcon icon={faCheck} className='m-1 align-middle mx-2' />
-											Modificar Venta
+											<Link to='/VentasListado'>
+												<FontAwesomeIcon icon={faCheck} className='m-1 align-middle mx-2' />
+												Modificar Venta
+											</Link>
 										</button>
 									</div>
 								</div>
