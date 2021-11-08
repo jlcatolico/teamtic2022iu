@@ -91,32 +91,30 @@ const TablaProductos = ({ listaProductos, setEjecutarConsulta }) => {
 
 	const sumitEdit = (e) => { };
 
+	//constantes para filtrar productos
+	const [busqueda, setBusqueda] = useState('');
+	const [productosFiltrados, setProductosFiltrados] = useState(listaProductos);
+
+	//permite actualizar lo que se escribe en el input de filtrar
+	useEffect(() => {
+		setProductosFiltrados(
+			listaProductos.filter((elemento) => {
+				return JSON.stringify(elemento).toLowerCase().includes(busqueda.toLowerCase());
+			})
+		);
+	}, [busqueda, listaProductos]);
+
 	return (
 		<div className='w-full h-full flex flex-col overflow-hidden'>
 			<div className='-my-2 overflow-x-auto sm:-mx-6 lg:-mx-8'>
 				<div className='py-2 align-middle inline-block min-w-full sm:px-6 lg:px-8'>
-					<div className='shadow overflow-hidden border-b border-gray-200 sm:rounded-lg p-3'>
-						<h1>Búsqueda</h1>
+					<div className='shadow overflow-hidden border-b border-gray-200 sm:rounded-lg p-4'>
+
 						<form>
-							<div className='my-6 row flex flex-row justify-evenly items-center'>
-								<label htmlFor='id_producto' className='labelSearch'>
-									Id. Producto
-								</label>
-								<input type='text' name='id_producto' id='id_producto' className='inputSearch' required />
-								<label htmlFor='descripcion_producto' className='labelSearch'>
-									Nombre Producto
-								</label>
-								<input type='text' name='descripcion_producto' id='descripcion_producto' autoComplete='descripcion_producto' className='inputSearch' required />
-								<label htmlFor='estado' className='labelSearch'>
-									Estado
-								</label>
-								<select id='estado' name='estado' autoComplete='estado' className='inputSearch' required>
-									<option>Disponible</option>
-									<option>No Disponible</option>
-								</select>
-								<button type='submit' className='searchButton'>
-									Buscar
-								</button>
+
+							<div className='my-3 row flex flex-row items-center'>
+								<h1 className='mr-5'>Búsqueda</h1>
+								<input type='text' id='id_producto' className='inputSearch' value={busqueda} onChange={(e) => setBusqueda(e.target.value)} placeholder="Ingrese búsqueda" />
 							</div>
 
 							<table className='min-w-full divide-y divide-gray-200'>
@@ -126,10 +124,10 @@ const TablaProductos = ({ listaProductos, setEjecutarConsulta }) => {
 											ID Producto
 										</th>
 										<th scope='col' className='labelTable'>
-											Nombre Producto
+											Descripción Producto
 										</th>
 										<th scope='col' className='labelTable'>
-											Valor Producto
+											Precio Unitario
 										</th>
 										<th scope='col' className='labelTable'>
 											Estado
@@ -140,7 +138,7 @@ const TablaProductos = ({ listaProductos, setEjecutarConsulta }) => {
 									</tr>
 								</thead>
 								<tbody className='bg-white divide-y divide-gray-200'>
-									{listaProductos.map((producto) => (
+									{productosFiltrados.map((producto) => (
 										<FilaPoducto key={nanoid()} producto={producto} setEjecutarConsulta={setEjecutarConsulta} />
 									))}
 								</tbody>
@@ -254,15 +252,15 @@ const FilaPoducto = ({ producto, setEjecutarConsulta }) => {
 		<tr>
 			{edit ? (
 				<>
-					<td className='p-4'>
+					<td className='p-2'>
 						{' '}
-						<input type='number' value={nuevoProducto.id_producto} className='listado' onChange={(e) => setnuevoProducto({ ...nuevoProducto, id_producto: e.target.value })}></input>
+						<input type='number' value={nuevoProducto.id_producto} className='listado text-gray-900' onChange={(e) => setnuevoProducto({ ...nuevoProducto, id_producto: e.target.value })}></input>
 					</td>
-					<td className='p-4'>
+					<td className='p-2'>
 						{' '}
 						<input type='text' value={nuevoProducto.descripcion} className='listado' onChange={(e) => setnuevoProducto({ ...nuevoProducto, descripcion: e.target.value })}></input>
 					</td>
-					<td className='p-4'>
+					<td className='p-2'>
 						{' '}
 						<input
 							type='number'
@@ -270,7 +268,7 @@ const FilaPoducto = ({ producto, setEjecutarConsulta }) => {
 							className='listado'
 							onChange={(e) => setnuevoProducto({ ...nuevoProducto, precio_unitario: e.target.value })}></input>
 					</td>
-					<td className='p-4'>
+					<td className='p-2'>
 						{' '}
 						<select
 							id='estado'
@@ -302,10 +300,10 @@ const FilaPoducto = ({ producto, setEjecutarConsulta }) => {
 					{edit ? (
 						<i onClick={() => actualizarProducto()} className='fas fa-check text-green-600 hover:text-green-300' />
 					) : (
-						<i onClick={() => setEdit(!edit)} className='fas fa-pencil-alt text-yellow-600 hover:text-yellow-300' />
+						<i onClick={() => setEdit(!edit)} className='fas fa-pen text-yellow-400 hover:text-yellow-200' />
 					)}
 
-					<i onClick={() => eliminarProducto()} className='fas fa-trash text-red-600 hover:text-red-300'></i>
+					<i onClick={() => eliminarProducto()} className='fas fa-times text-red-600 hover:text-red-300'></i>
 				</div>
 			</td>
 		</tr>
@@ -361,7 +359,7 @@ const FormularioCreacionProductos = ({ setMostrarTabla }) => {
 								<label className=' tracking-wide mb-2 text-gray-600' htmlFor='id'>
 									Id. Producto
 								</label>
-								<input type='number' name='id_producto' id='id_producto' className='inputTextE ' required />
+								<input type='number' name='id_producto' id='id_producto' className='inputTextE' required />
 							</div>
 							<div>
 								<label className=' tracking-wide mb-2 text-gray-600' htmlFor='Descripcion'>
