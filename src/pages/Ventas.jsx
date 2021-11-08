@@ -122,7 +122,7 @@ const Ventas = () => {
 				</div>
 				<div className=' w-2/6 flex items-center'>
 					<div className='w-full flex justify-end items-center'>
-						<button className='normalButton'>
+						<button className='searchButton'>
 							<Link to='/VentasListado'>
 								<FontAwesomeIcon icon={faArrowLeft} className='m-1 align-middle mx-2' />
 								Regresar

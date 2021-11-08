@@ -31,7 +31,7 @@
 }
 
 .searchButton {
-	@apply inline-flex justify-center py-2 px-4 border border-transparent shadow-sm rounded-md text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500;
+	@apply inline-flex justify-center text-white bg-indigo-500 p-2 rounded-lg hover:bg-indigo-600 mx-4 focus:outline-none;
 }
 
 .spanSeccion {
@@ -62,7 +62,7 @@
 }
 
 .normalButton{
-	@apply text-white bg-green-500 p-2 rounded-lg hover:bg-green-600 mx-4;
+	@apply text-white bg-green-500 p-2 rounded-lg hover:bg-green-600 mx-4 focus:outline-none;
 }
 
 .ImagenIndex {

@@ -5,12 +5,11 @@ import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import { nanoid } from 'nanoid';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faArrowLeft, faPlus } from '@fortawesome/free-solid-svg-icons';
+import { faArrowLeft, faCheck, faPlus } from '@fortawesome/free-solid-svg-icons';
 
 const getToken = () => {
 	return `Bearer ${localStorage.getItem('token')}`;
 };
-
 
 const Productos = () => {
 	const [mostrarTabla, setMostrarTabla] = useState(true);
@@ -71,7 +70,7 @@ const Productos = () => {
 				<div className=' w-2/6 flex items-center'>
 					<div className='w-full flex justify-end items-center'>
 						<button onClick={() => { setMostrarTabla(!mostrarTabla); }}
-							className='normalButton'>
+							className='searchButton'>
 							<FontAwesomeIcon icon={iconoBoton} className='m-1 align-middle mx-2' />
 							{textoBoton}
 						</button>
@@ -91,11 +90,9 @@ const TablaProductos = ({ listaProductos, setEjecutarConsulta }) => {
 
 	const sumitEdit = (e) => { };
 
-	//constantes para filtrar productos
 	const [busqueda, setBusqueda] = useState('');
 	const [productosFiltrados, setProductosFiltrados] = useState(listaProductos);
 
-	//permite actualizar lo que se escribe en el input de filtrar
 	useEffect(() => {
 		setProductosFiltrados(
 			listaProductos.filter((elemento) => {
@@ -109,9 +106,7 @@ const TablaProductos = ({ listaProductos, setEjecutarConsulta }) => {
 			<div className='-my-2 overflow-x-auto sm:-mx-6 lg:-mx-8'>
 				<div className='py-2 align-middle inline-block min-w-full sm:px-6 lg:px-8'>
 					<div className='shadow overflow-hidden border-b border-gray-200 sm:rounded-lg p-4'>
-
 						<form>
-
 							<div className='my-3 row flex flex-row items-center'>
 								<h1 className='mr-5'>Búsqueda</h1>
 								<input type='text' id='id_producto' className='inputSearch' value={busqueda} onChange={(e) => setBusqueda(e.target.value)} placeholder="Ingrese búsqueda" />
@@ -132,7 +127,7 @@ const TablaProductos = ({ listaProductos, setEjecutarConsulta }) => {
 										<th scope='col' className='labelTable'>
 											Estado
 										</th>
-										<th scope='col' className='labelTable'>
+										<th scope='col' className='labelTable flex justify-center'>
 											Acciones
 										</th>
 									</tr>
@@ -384,9 +379,10 @@ const FormularioCreacionProductos = ({ setMostrarTabla }) => {
 									<option>No Disponible</option>
 								</select>
 							</div>
-							<div className='my-8'>
-								<button type='submit' className='w-full bg-indigo-500 text-white p-2 rounded-lg hover:bg-indigo-600'>
-									Guardar
+							<div className='grid justify-items-center'>
+								<button type='submit' className='normalButton justify-items-center my-10'>
+									<FontAwesomeIcon icon={faCheck} className='m-1 align-middle mx-2' />
+									Crear Producto
 								</button>
 							</div>
 						</div>
