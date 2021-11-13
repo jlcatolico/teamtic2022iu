@@ -2,16 +2,16 @@ import React from 'react';
 import DesarrolloIT from 'Media/DesarrolloIT.ico';
 import DesarrolloIT_completo from 'Media/DesarrolloIT completo.ico';
 import user from 'Media/user.svg';
-import {useAuth0} from '@auth0/auth0-react';
+import { useAuth0 } from '@auth0/auth0-react';
 import IconoToys from 'Media/IconoToys.png';
 import ToysCompleto from 'Media/ToysCompleto.png';
-import {Link, useLocation} from 'react-router-dom';
+import { Link, useLocation } from 'react-router-dom';
 
 const Navbar = () => {
-	const {loginWithRedirect} = useAuth0();
+	const { loginWithRedirect } = useAuth0();
 
 	return (
-		<nav className='bg-gradient-to-r from-white via-yellow-400 to-yellow-600'>
+		<nav className='bg-gray-200'>
 			<div className='max-w-7xl mx-auto px-2 sm:px-6 lg:px-8'>
 				<div className='relative flex items-center justify-between h-16'>
 					<div className='absolute inset-y-0 left-0 flex items-center sm:hidden'>
@@ -39,35 +39,35 @@ const Navbar = () => {
 								<Link to={'/Marcas'}>
 									<button
 										type='button'
-										className='text-orange-500 px-3 py-2 rounded-lg text-lg font-extrabold hover:bg-yellow-600 hover:text-white hover:font-extrabold hover:border-white hover:border-4'>
+										className='text-orange-500 px-3 py-2 rounded-lg text-lg font-bold hover:bg-yellow-600 hover:text-white hover:font-bold hover:border-white hover:border-4'>
 										Marcas
 									</button>
 								</Link>
 								<Link to={'/Edades'}>
 									<button
 										type='button'
-										className='text-orange-500 px-3 py-2 rounded-lg text-lg font-extrabold hover:bg-yellow-600 hover:text-white hover:font-extrabold hover:border-white hover:border-4'>
+										className='text-orange-500 px-3 py-2 rounded-lg text-lg font-bold hover:bg-yellow-600 hover:text-white hover:font-bold hover:border-white hover:border-4'>
 										Edades
 									</button>
 								</Link>
 								<Link to={'/Categorias'}>
 									<button
 										type='button'
-										className='text-orange-500 px-3 py-2 rounded-lg text-lg font-extrabold hover:bg-yellow-600 hover:text-white hover:font-extrabold hover:border-white hover:border-4'>
+										className='text-orange-500 px-3 py-2 rounded-lg text-lg font-bold hover:bg-yellow-600 hover:text-white hover:font-bold hover:border-white hover:border-4'>
 										Categorias
 									</button>
 								</Link>
 								<Link to={'/ServicioAlCliente'}>
 									<button
 										type='button'
-										className='text-gray-500 px-3 py-2 rounded-lg text-lg font-extrabold hover:bg-white hover:text-yellow-600 hover:font-extrabold hover:border-white hover:border-4'>
+										className='text-orange-500 px-3 py-2 rounded-lg text-lg font-bold hover:bg-yellow-600 hover:text-white hover:font-bold hover:border-white hover:border-4'>
 										Servicio Al Cliente
 									</button>
 								</Link>
 								<Link to={'/AcercaDeNosotros'}>
 									<button
 										type='button'
-										className='text-gray-500 px-3 py-2 rounded-lg text-lg font-extrabold hover:bg-white hover:text-yellow-600 hover:font-extrabold hover:border-white hover:border-4'>
+										className='text-orange-500 px-3 py-2 rounded-lg text-lg font-bold hover:bg-yellow-600 hover:text-white hover:font-bold hover:border-white hover:border-4'>
 										Acerca De Nosotros
 									</button>
 								</Link>
@@ -79,7 +79,7 @@ const Navbar = () => {
 						<button
 							onClick={() => loginWithRedirect()}
 							type='button'
-							className='bg-green-700 hover:bg-green-600 p-2 rounded-lg text-gray-200 hover:text-white focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-white'>
+							className='bg-green-700 hover:bg-green-600 p-2 rounded-lg text-gray-200 hover:text-white focus:outline-none focus:ring-white'>
 							Login
 						</button>
 					</div>

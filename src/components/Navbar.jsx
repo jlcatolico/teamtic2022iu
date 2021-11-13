@@ -52,7 +52,7 @@ const Navbar = () => {
 								<button
 									onClick={() => cerrarSession()}
 									type='button'
-									className='bg-green-600 hover:bg-green-500 p-2 rounded-lg text-white hover:text-white focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-white'
+									className='bg-green-600 hover:bg-green-500 p-2 rounded-lg text-white hover:text-white focus:outline-none focus:ring-white'
 									id='user-menu-button'
 									aria-expanded='false'
 									aria-haspopup='true'>
