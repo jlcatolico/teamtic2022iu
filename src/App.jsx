@@ -7,16 +7,9 @@ import Login from 'pages/Login';
 import Registro from 'pages/Registro';
 import Index from 'pages/Index';
 import Productos from 'pages/Productos';
-import ProductosActualizar from 'pages/ProductosActualizar';
-import ProductosCrear from 'pages/ProductosCrear';
-import ProductosListar from 'pages/ProductosListar';
-import UsuariosActualizar from 'pages/UsuariosActualizar';
-import UsuariosListar from 'pages/UsuariosListar';
 import VentasActualizar from 'pages/VentasActualizar';
-import VentasCrear from 'pages/VentasCrear';
 import Ventas from 'pages/Ventas';
 import Inside from 'pages/Inside';
-import VentasListar from 'pages/VentasListar';
 import Usuarios from 'pages/Usuarios';
 import AcercaDeNosotros from 'pages/AcercaDeNosotros';
 import Marcas from 'pages/Marcas';
@@ -55,14 +48,8 @@ function App() {
 							path={[
 								'/Inside',
 								'/Productos',
-								'/ProductosActualizar',
-								'/ProductosCrear',
-								'/ProductosListar',
-								'/UsuariosActualizar',
-								'/UsuariosListar',
 								'/Usuarios',
 								'/VentasActualizar',
-								'/VentasCrear',
 								'/Ventas',
 								'/VentasListado',
 							]}>
@@ -74,21 +61,6 @@ function App() {
 									<Route path='/Productos'>
 										<Productos />
 									</Route>
-									<Route path='/ProductosActualizar'>
-										<ProductosActualizar />
-									</Route>
-									<Route path='/ProductosCrear'>
-										<ProductosCrear />
-									</Route>
-									<Route path='/ProductosListar'>
-										<ProductosListar />
-									</Route>
-									<Route path='/UsuariosActualizar'>
-										<UsuariosActualizar />
-									</Route>
-									<Route path='/UsuariosListar'>
-										<UsuariosListar />
-									</Route>
 									<Route path='/Usuarios'>
 										<Usuarios />
 									</Route>
@@ -97,9 +69,6 @@ function App() {
 									</Route>
 									<Route path='/VentasListado'>
 										<VentasListado />
-									</Route>
-									<Route path='/VentasCrear'>
-										<VentasCrear />
 									</Route>
 									<Route path='/Ventas'>
 										<Ventas />

@@ -83,8 +83,6 @@ const VentasActualizar = (props) => {
 			setEjecutarConsulta(false);
 		}
 
-
-
 		fetchVendores();
 		fetchProductos();
 	}, []);
@@ -111,8 +109,6 @@ const VentasActualizar = (props) => {
 			})
 			.filter((v) => v);
 
-
-
 		const datosVenta = {
 			vendedor: vendedores.filter((v) => v._id === formData.vendedor)[0],
 			cantidad: formData.valor_venta,
@@ -121,8 +117,6 @@ const VentasActualizar = (props) => {
 			fecha: formData.fecha,
 			estado: formData.estado
 		};
-
-
 
 		const options = {
 			method: 'PATCH',
