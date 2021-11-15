@@ -89,7 +89,9 @@ const Ventas = () => {
 			productos: listaProductos,
 			totalVenta: formData.totalVenta,
 			fecha: formData.fecha,
-			estado: formData.estado
+			estado: formData.estado,
+			id_cliente: formData.id_cliente,
+			nombre_cliente: formData.nombre_cliente,
 		};
 
 		const options = {
@@ -103,15 +105,17 @@ const Ventas = () => {
 
 		await axios.request(options)
 			.then(function (response) {
+				toast.success('venta agregada con exito');
 				console.log(response.data);
+				history.push('/VentasListado');
 			})
 			.catch(function (error) {
 				console.log('error');
 				console.error(error);
 			});
 		console.log('enviado');
-		toast.success('venta agregada con exito');
-		history.push('/VentasListado');
+		
+		
 	};
 
 	return (
@@ -156,6 +160,16 @@ const Ventas = () => {
 												return (<option key={nanoid()} onChange={(a) => setVendedores(vendedores.filter((v) => v._id === a.target.value)[0])} value={el._id}>{`${el.nombre} ${el.apellido}`}</option>);
 											})}
 										</select>
+									</div>
+									<div className='grid grid-cols-2 items-center'>
+										<label className='tracking-wide mb-2'>ID Cliente
+										</label>
+										<input type='text' name='id_cliente' className='inputTextE text-gray-600 w-64' />
+									</div>
+									<div className='grid grid-cols-2 items-center'>
+										<label className='tracking-wide mb-2'>Nombre Cliente
+										</label>
+										<input type='text' name='nombre_cliente' className='inputTextE text-gray-600 w-64' />
 									</div>
 
 									<TablaProductos productos={productos} setProductos={setProductos} setProductosTabla={setProductosTabla} total={total} setTotal={setTotal} />

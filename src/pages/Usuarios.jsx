@@ -289,7 +289,7 @@ const FilaUsuarios = ({ usuario, setEjecutarConsulta }) => {
 							value={nuevoUsuario.rol}
 							name='rol'
 							className='listado'
-							onChange={(e) => setnuevoUsuario({ ...nuevoUsuario, rol: e.target.value })}
+							g
 							required
 							defaultValue={0}>
 							<option disabled value={0}>
