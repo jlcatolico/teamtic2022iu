@@ -249,7 +249,7 @@ const FilaPoducto = ({ producto, setEjecutarConsulta }) => {
 				<>
 					<td className='p-2'>
 						{' '}
-						<input type='number' value={nuevoProducto.id_producto} className='listado text-gray-900' onChange={(e) => setnuevoProducto({ ...nuevoProducto, id_producto: e.target.value })}></input>
+						<input type='number' value={nuevoProducto.id_producto} className='listado bg-gray-50' disabled={true} ></input>
 					</td>
 					<td className='p-2'>
 						{' '}
@@ -337,7 +337,7 @@ const FormularioCreacionProductos = ({ setMostrarTabla }) => {
 			});
 
 		console.log('enviado');
-		toast.success('producto agregado con exito');
+		toast.success('Producto agregado con exito');
 		setMostrarTabla(true);
 	};
 
