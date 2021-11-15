@@ -122,6 +122,12 @@ const VentasListado = () => {
 												Vendedor
 											</th>
 											<th scope='col' className='labelTable'>
+												Id Cliente
+											</th>
+											<th scope='col' className='labelTable'>
+												Cliente
+											</th>
+											<th scope='col' className='labelTable'>
 												Valor Venta
 											</th>
 											<th scope='col' className='labelTable'>
@@ -139,6 +145,8 @@ const VentasListado = () => {
 												<td className='spaceTable resultTable text-gray-900 font-medium '>{venta._id.substring(0, 10)}</td>
 												<td className='spaceTable resultTable'>{venta.fecha}</td>
 												<td className='spaceTable resultTable'>{venta.vendedor.nombre} {venta.vendedor.apellido}</td>
+												<td className='spaceTable resultTable'>{venta.id_cliente}</td>
+												<td className='spaceTable resultTable'>{venta.nombre_cliente}</td>
 												<td className='spaceTable resultTable'>{venta.totalVenta}</td>
 												<td className='spaceTable resultTable'>{venta.estado}</td>
 												<td className='resultTable spaceTable font-medium'>

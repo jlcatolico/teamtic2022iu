@@ -18,7 +18,7 @@ const VentasActualizar = (props) => {
 	//const { data } = props.location;
 
 	const location = useLocation();
-	const datos = location.data;
+	const [datos, setDatos] = useState(location.data);
 
 	//console.log(datos);
 
@@ -30,9 +30,6 @@ const VentasActualizar = (props) => {
 	const [vendedores, setVendedores] = useState([]);
 	const [productos, setProductos] = useState([]);
 	const [productosTabla, setProductosTabla] = useState([]);
-	const history = useHistory();
-	const [mostrarTabla, setMostrarTabla] = useState(true);
-	const [textoBoton, setTextoBoton] = useState('Crear Venta');
 	const [ventas, setVentas] = useState([]);
 	const [ejecutarConsulta, setEjecutarConsulta] = useState([]);
 	let [total, setTotal] = useState(0);
@@ -115,7 +112,9 @@ const VentasActualizar = (props) => {
 			productos: listaProductos,
 			totalVenta: formData.totalVenta,
 			fecha: formData.fecha,
-			estado: formData.estado
+			estado: formData.estado,
+			id_cliente: formData.id_cliente,
+			nombre_cliente: formData.nombre_cliente,
 		};
 
 		const options = {
@@ -171,7 +170,7 @@ const VentasActualizar = (props) => {
 									<div className='grid grid-cols-2 items-center'>
 										<label className='tracking-wide mb-2'>Fecha
 										</label>
-										<input value={datos.fecha} type='date' name='fecha' className='inputTextE text-gray-600 w-64' />
+										<input value={datos.fecha} type='date' name='fecha' className='inputTextE text-gray-600 w-64' onChange={(e) => setDatos({ ...datos, fecha: e.target.value })}/>
 									</div>
 									<div className='grid grid-cols-2 items-center'>
 										<label className='tracking-wide mb-2' htmlFor='vendedor'>Vendedor</label>
@@ -183,6 +182,16 @@ const VentasActualizar = (props) => {
 												return (<option key={nanoid()} onChange={(a) => setVendedores(vendedores.filter((v) => v._id === a.target.value)[0])} value={el._id}>{`${el.nombre} ${el.apellido}`}</option>);
 											})}
 										</select>
+										</div>
+									<div className='grid grid-cols-2 items-center'>
+										<label className='tracking-wide mb-2'>ID Cliente
+										</label>
+										<input value={datos.id_cliente} type='text' name='id_cliente' className='inputTextE text-gray-600 w-64' onChange={(e) => setDatos({ ...datos, id_cliente: e.target.value })}/>
+									</div>
+									<div className='grid grid-cols-2 items-center'>
+										<label className='tracking-wide mb-2'>Nombre Cliente
+										</label>
+										<input value={datos.nombre_cliente} type='text' name='nombre_cliente' className='inputTextE text-gray-600 w-64' onChange={(e) => setDatos({ ...datos, nombre_cliente: e.target.value })}/>
 									</div>
 
 									<TablaProductos productos={productos} setProductos={setProductos} setProductosTabla={setProductosTabla} total={total} setTotal={setTotal} datos={datos} />
@@ -190,7 +199,7 @@ const VentasActualizar = (props) => {
 									<div className='grid grid-cols-2 items-center'>
 										<label className='tracking-wide mb-2'>Estado
 										</label>
-										<select value={datos.estado} name='estado' className='inputTextE text-gray-600 w-48'>
+										<select value={datos.estado} name='estado' className='inputTextE text-gray-600 w-48' onChange={(e) => setDatos({ ...datos, estado: e.target.value })}>
 											<option disabled value=''>Seleccione un Estado</option>
 											<option>En progreso</option>
 											<option>Completada</option>

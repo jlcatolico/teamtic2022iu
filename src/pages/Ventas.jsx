@@ -3,12 +3,10 @@ import React, { useEffect, useState, useRef } from 'react';
 import { Link, useHistory } from 'react-router-dom';
 import axios from 'axios';
 import { nanoid } from 'nanoid';
-import { crearVenta } from 'utils/api';
 import { obtenerProductos } from 'utils/api';
 import { obtenerUsuarios } from 'utils/api';
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
-import values from 'postcss-modules-values';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faArrowLeft, faCheck, faPlus } from '@fortawesome/free-solid-svg-icons';
 
@@ -23,11 +21,7 @@ const Ventas = () => {
 	const [productos, setProductos] = useState([]);
 	const [productosTabla, setProductosTabla] = useState([]);
 	const history = useHistory();
-	const [mostrarTabla, setMostrarTabla] = useState(true);
-	const [textoBoton, setTextoBoton] = useState('Crear Venta');
-	const [ventas, setVentas] = useState([]);
-	const [ejecutarConsulta, setEjecutarConsulta] = useState([]);
-
+	
 	let [total, setTotal] = useState(0);
 
 	useEffect(() => {
@@ -89,7 +83,9 @@ const Ventas = () => {
 			productos: listaProductos,
 			totalVenta: formData.totalVenta,
 			fecha: formData.fecha,
-			estado: formData.estado
+			estado: formData.estado,
+			id_cliente: formData.id_cliente,
+			nombre_cliente: formData.nombre_cliente,
 		};
 
 		const options = {
@@ -104,14 +100,16 @@ const Ventas = () => {
 		await axios.request(options)
 			.then(function (response) {
 				console.log(response.data);
+				
 			})
 			.catch(function (error) {
 				console.log('error');
 				console.error(error);
 			});
 		console.log('enviado');
-		toast.success('venta agregada con exito');
+		toast.success('Venta creada con exito');
 		history.push('/VentasListado');
+		toast.warning('No se registró la venta')
 	};
 
 	return (
@@ -156,6 +154,16 @@ const Ventas = () => {
 												return (<option key={nanoid()} onChange={(a) => setVendedores(vendedores.filter((v) => v._id === a.target.value)[0])} value={el._id}>{`${el.nombre} ${el.apellido}`}</option>);
 											})}
 										</select>
+									</div>
+									<div className='grid grid-cols-2 items-center'>
+										<label className='tracking-wide mb-2'>ID Cliente
+										</label>
+										<input type='text' name='id_cliente' className='inputTextE text-gray-600 w-64' />
+									</div>
+									<div className='grid grid-cols-2 items-center'>
+										<label className='tracking-wide mb-2'>Nombre Cliente
+										</label>
+										<input type='text' name='nombre_cliente' className='inputTextE text-gray-600 w-64' />
 									</div>
 
 									<TablaProductos productos={productos} setProductos={setProductos} setProductosTabla={setProductosTabla} total={total} setTotal={setTotal} />
